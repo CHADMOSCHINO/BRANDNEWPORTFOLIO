@@ -122,7 +122,7 @@ function ProjectCard({ project, index }: { project: typeof PROJECTS[number]; ind
                 className="group/link flex items-center gap-4 w-max cursor-pointer"
               >
                 <span className="text-white text-xs font-light tracking-widest uppercase">
-                  View Case Study
+                  View Live Site
                 </span>
                 <div className="w-8 h-[1px] bg-zinc-800 group-hover/link:w-16 group-hover/link:bg-white transition-all duration-500 ease-out relative overflow-hidden">
                   <div className="absolute inset-0 bg-white transform -translate-x-full group-hover/link:translate-x-0 transition-transform duration-500 ease-out" />

@@ -72,7 +72,7 @@ export default function Testimonials() {
       {/* Scrolling testimonials */}
       <div
         ref={scrollRef}
-        className="flex gap-4 sm:gap-6 overflow-hidden cursor-grab active:cursor-grabbing px-5 sm:px-6"
+        className="flex gap-4 sm:gap-6 overflow-hidden px-5 sm:px-6"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}

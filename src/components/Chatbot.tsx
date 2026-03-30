@@ -1,21 +1,38 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Send, ArrowUpRight } from 'lucide-react';
 import { QA_DATABASE, PERSONAL } from '@/lib/constants';
 import type { ChatMessage } from '@/types';
 
+const MAX_INPUT_LENGTH = 500;
+const MAX_MESSAGES_PER_SESSION = 40;
+const MIN_MESSAGE_INTERVAL_MS = 800;
+
 const DEFAULT_RESPONSE =
-  "I'm not sure about that one. Try asking about pricing, timeline, services, or how to get started!";
+  "I'm not sure about that one. Try asking about our $200 Weekend Special, pricing, timeline, services, or how to get started!";
+
+function sanitizeInput(raw: string): string {
+  return raw.replace(/<[^>]*>/g, '').replace(/[<>"'`]/g, '').trim();
+}
 
 function findAnswer(query: string): string {
-  const lower = query.toLowerCase();
+  const lower = query.toLowerCase().replace(/[^a-z0-9\s$]/g, ' ');
+
+  let bestMatch = { score: 0, answer: '' };
   for (const qa of QA_DATABASE) {
+    let score = 0;
     for (const keyword of qa.keywords) {
-      if (lower.includes(keyword)) return qa.answer;
+      if (lower.includes(keyword)) {
+        score += keyword.includes(' ') ? 3 : 1;
+      }
+    }
+    if (score > bestMatch.score) {
+      bestMatch = { score, answer: qa.answer };
     }
   }
-  return DEFAULT_RESPONSE;
+
+  return bestMatch.score > 0 ? bestMatch.answer : DEFAULT_RESPONSE;
 }
 
 export default function Chatbot() {
@@ -27,18 +44,19 @@ export default function Chatbot() {
       id: '0',
       role: 'bot',
       content:
-        "Ask me about pricing, timeline, services, or how to get started.",
+        "Welcome to Grellax Labs! Ask me about our $200 Weekend Special, pricing, services, or how to get started.",
     },
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const lastSentRef = useRef(0);
+  const messageCountRef = useRef(0);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  // Show promo after 8 seconds if chat hasn't been opened
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!isOpen && !promoDismissed) {
@@ -48,17 +66,36 @@ export default function Chatbot() {
     return () => clearTimeout(timer);
   }, [isOpen, promoDismissed]);
 
-  // Hide promo when chat opens
   useEffect(() => {
     if (isOpen) setShowPromo(false);
   }, [isOpen]);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    const userMsg = input.trim();
+  const handleSend = useCallback(() => {
+    const sanitized = sanitizeInput(input);
+    if (!sanitized) return;
+
+    const now = Date.now();
+    if (now - lastSentRef.current < MIN_MESSAGE_INTERVAL_MS) return;
+    if (messageCountRef.current >= MAX_MESSAGES_PER_SESSION) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: now.toString(),
+          role: 'bot',
+          content: "You've sent a lot of messages! For a deeper conversation, book a free call at calendly.com/chadmoschino-grellaxlabs/30min or email chadmoschino@grellaxlabs.com.",
+        },
+      ]);
+      setInput('');
+      return;
+    }
+
+    lastSentRef.current = now;
+    messageCountRef.current += 1;
+
+    const userMsg = sanitized.slice(0, MAX_INPUT_LENGTH);
     setMessages((prev) => [
       ...prev,
-      { id: Date.now().toString(), role: 'user', content: userMsg },
+      { id: now.toString(), role: 'user', content: userMsg },
     ]);
     setInput('');
     setIsTyping(true);
@@ -73,7 +110,7 @@ export default function Chatbot() {
       ]);
       setIsTyping(false);
     }, 600 + Math.random() * 400);
-  };
+  }, [input]);
 
   const dismissPromo = () => {
     setShowPromo(false);
@@ -103,16 +140,15 @@ export default function Chatbot() {
           <div className="flex items-center gap-2 mb-3">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-[10px] text-emerald-400/80 tracking-widest uppercase font-light">
-              Limited Offer
+              Available Now
             </span>
           </div>
 
           <p className="text-white text-sm font-light tracking-tight leading-relaxed mb-1">
-            Q1 & Q2 Discounted Rates
+            Have a project in mind?
           </p>
           <p className="text-zinc-500 text-xs font-light leading-relaxed mb-4">
-            Special pricing available now. DM for details or chat with us
-            below.
+            Ask us about pricing, timelines, or get a quick answer below.
           </p>
 
           <div className="flex gap-2">
@@ -212,8 +248,10 @@ export default function Chatbot() {
               <input
                 type="text"
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
                 placeholder="Type a message..."
+                maxLength={MAX_INPUT_LENGTH}
+                autoComplete="off"
                 className="flex-1 bg-transparent text-white text-sm font-light placeholder:text-zinc-700 focus:outline-none"
               />
               <button

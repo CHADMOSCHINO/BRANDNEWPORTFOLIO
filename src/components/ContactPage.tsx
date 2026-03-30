@@ -15,10 +15,12 @@ export default function ContactPage() {
     budget: '',
     message: '',
   });
+  const [honeypot, setHoneypot] = useState('');
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const submitTimestampRef = useRef(0);
 
   /* ── Entrance animation ── */
   useEffect(() => {
@@ -35,6 +37,30 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (honeypot) return;
+
+    const now = Date.now();
+    if (now - submitTimestampRef.current < 3000) {
+      setStatus('error');
+      setErrorMsg('Please wait a moment before submitting again.');
+      return;
+    }
+    submitTimestampRef.current = now;
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(form.email)) {
+      setStatus('error');
+      setErrorMsg('Please enter a valid email address.');
+      return;
+    }
+
+    if (form.name.length > 100 || form.email.length > 200 || form.message.length > 5000) {
+      setStatus('error');
+      setErrorMsg('One or more fields exceed the maximum length.');
+      return;
+    }
+
     setStatus('submitting');
     setErrorMsg('');
 
@@ -44,7 +70,7 @@ export default function ContactPage() {
         ...form,
       });
 
-      const res = await fetch('/', {
+      const res = await fetch('/__forms.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: body.toString(),
@@ -136,6 +162,18 @@ export default function ContactPage() {
                 className="space-y-5"
               >
                 <input type="hidden" name="form-name" value="contact" />
+                <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', top: '-9999px', opacity: 0, height: 0, overflow: 'hidden' }}>
+                  <label htmlFor="website">Website</label>
+                  <input
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
 
                 {/* Name */}
                 <div>
@@ -147,6 +185,7 @@ export default function ContactPage() {
                     name="name"
                     type="text"
                     required
+                    maxLength={100}
                     value={form.name}
                     onChange={(e) => update('name', e.target.value)}
                     placeholder="Your name"
@@ -164,6 +203,7 @@ export default function ContactPage() {
                     name="email"
                     type="email"
                     required
+                    maxLength={200}
                     value={form.email}
                     onChange={(e) => update('email', e.target.value)}
                     placeholder="you@company.com"
@@ -234,6 +274,7 @@ export default function ContactPage() {
                     name="message"
                     required
                     rows={5}
+                    maxLength={5000}
                     value={form.message}
                     onChange={(e) => update('message', e.target.value)}
                     placeholder="Tell me about your project..."

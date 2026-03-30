@@ -8,7 +8,7 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
-const siteUrl = "https://chadgreen.dev";
+const siteUrl = "https://grellaxlabs.com";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -17,9 +17,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Chad Green | Web Design Agency Raleigh NC — Ultra Fast Turnovers",
+  title: "Grellax Labs | #1 Web Services Agency — Fastest Turnarounds",
   description:
-    "Professional graphic designer turned full-stack developer in Raleigh NC — UX-driven websites, headless Shopify stores, and custom web apps delivered in 5–7 days. 5+ years of design & engineering experience. 50+ brands scaled nationwide.",
+    "Premium websites, headless Shopify stores, AI integrations, and custom web apps delivered in 5–7 days. 5+ years of design & engineering experience. 50+ brands scaled nationwide.",
   keywords: [
     "web design agency Raleigh NC",
     "best web agency East Coast",
@@ -41,24 +41,24 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    siteName: "Chad Green — Grellax Labs",
-    title: "Chad Green | Web Design Agency Raleigh NC — Ultra Fast Turnovers",
+    siteName: "Grellax Labs",
+    title: "Grellax Labs | #1 Web Services Agency — Fastest Turnarounds",
     description:
-      "Grellax Labs — The #1 Web Services Agency. Premium websites, headless Shopify, and UX-driven web apps. 50+ brands scaled nationwide.",
+      "Premium websites, headless Shopify, AI integrations, and UX-driven web apps. 50+ brands scaled nationwide. Book a free call.",
     images: [
       {
         url: `${siteUrl}/og-preview.png`,
         width: 1200,
         height: 630,
-        alt: "Grellax Labs — The #1 Web Services Agency",
+        alt: "Grellax Labs — Premium Web Design Agency",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chad Green | Web Design Agency Raleigh NC",
+    title: "Grellax Labs | #1 Web Services Agency — Fastest Turnarounds",
     description:
-      "Grellax Labs — The #1 Web Services Agency. 50+ brands scaled. Book a free call.",
+      "Premium websites, AI integrations & custom web apps. 50+ brands scaled. Book a free call.",
     images: [`${siteUrl}/og-preview.png`],
   },
   icons: {

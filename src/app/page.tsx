@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Preloader from '@/components/Preloader';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import SocialProofSection from '@/components/SocialProofSection';
+import RetainerServices from '@/components/RetainerServices';
 import MarqueeBanner from '@/components/MarqueeBanner';
 import ProjectCards from '@/components/ProjectCards';
 import ServicesSection from '@/components/ServicesSection';
@@ -12,6 +14,7 @@ import TechBadges from '@/components/TechBadges';
 import GoogleReviews from '@/components/GoogleReviews';
 import Footer from '@/components/Footer';
 import Chatbot from '@/components/Chatbot';
+import WeekendSpecialPopup from '@/components/WeekendSpecialPopup';
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
@@ -27,6 +30,8 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <SocialProofSection />
+        <RetainerServices />
         <MarqueeBanner />
         <ProjectCards />
         <ServicesSection />
@@ -36,6 +41,7 @@ export default function Home() {
       </main>
       <Footer />
       {loaded && <Chatbot />}
+      <WeekendSpecialPopup />
     </div>
   );
 }

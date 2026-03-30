@@ -23,7 +23,7 @@ export default function Hero() {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.12] pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.18] pointer-events-none"
           aria-hidden="true"
         >
           <source src="/hero-bg.mp4" type="video/mp4" />
@@ -151,7 +151,7 @@ export default function Hero() {
 
           {/* Main heading — clamped for ultra-wide */}
           <div className="overflow-hidden w-full flex justify-center">
-            <h2
+            <h1
               className="leading-[0.8] tracking-tighter font-light text-white"
               style={{
                 fontSize: 'clamp(3rem, 13vw, 12rem)',
@@ -159,14 +159,14 @@ export default function Hero() {
               }}
             >
               CREATIVE
-            </h2>
+            </h1>
           </div>
           <div className="overflow-hidden flex items-center justify-center gap-3 sm:gap-6 md:gap-8 w-full mt-1 sm:mt-2 md:mt-4">
             <div
               className="h-[1px] w-6 sm:w-12 md:w-24 bg-white/20 hidden sm:block origin-left"
               style={{ animation: 'lineGrow 1.5s 3s var(--ease-out-expo) both' }}
             />
-            <h2
+            <h1
               className="leading-[0.8] tracking-tighter font-light text-zinc-300"
               style={{
                 fontSize: 'clamp(3rem, 13vw, 12rem)',
@@ -174,7 +174,7 @@ export default function Hero() {
               }}
             >
               DEVELOPER
-            </h2>
+            </h1>
             <div
               className="h-[1px] w-6 sm:w-12 md:w-24 bg-white/20 hidden sm:block origin-right"
               style={{ animation: 'lineGrow 1.5s 3s var(--ease-out-expo) both' }}
@@ -220,6 +220,13 @@ export default function Hero() {
                 Partner
               </span>
             </div>
+            <div className="w-[1px] h-7 sm:h-8 bg-zinc-800" />
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-emerald-400 text-sm font-light">Open</span>
+              <span className="text-[8px] sm:text-[9px] text-zinc-600 tracking-[0.2em] uppercase">
+                To Contract
+              </span>
+            </div>
           </div>
 
           {/* CTA buttons */}
@@ -263,9 +270,9 @@ export default function Hero() {
             <span className="text-[10px] text-zinc-600 font-light uppercase tracking-widest">
               Immersion
             </span>
-            <div className="h-[1px] bg-zinc-800 flex-1 relative cursor-pointer group">
-              <div className="absolute left-0 top-0 bottom-0 w-[85%] bg-zinc-400 group-hover:bg-white transition-colors duration-500" />
-              <div className="absolute left-[85%] top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)] scale-50 group-hover:scale-100 transition-transform duration-300" />
+            <div className="h-[1px] bg-zinc-800 flex-1 relative">
+              <div className="absolute left-0 top-0 bottom-0 w-[85%] bg-zinc-400" />
+              <div className="absolute left-[85%] top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
             </div>
           </div>
         </div>
