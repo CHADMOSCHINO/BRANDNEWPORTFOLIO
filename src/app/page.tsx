@@ -11,10 +11,11 @@ import ProjectCards from '@/components/ProjectCards';
 import ServicesSection from '@/components/ServicesSection';
 import Testimonials from '@/components/Testimonials';
 import TechBadges from '@/components/TechBadges';
+import PricingSection from '@/components/PricingSection';
 import GoogleReviews from '@/components/GoogleReviews';
+import FAQContent from '@/components/FAQContent';
 import Footer from '@/components/Footer';
 import Chatbot from '@/components/Chatbot';
-import WeekendSpecialPopup from '@/components/WeekendSpecialPopup';
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
@@ -35,13 +36,16 @@ export default function Home() {
         <MarqueeBanner />
         <ProjectCards />
         <ServicesSection />
+        <PricingSection />
         <TechBadges />
         <Testimonials />
         <GoogleReviews />
+        <section id="faq" className="relative z-10 bg-[#020202] py-20 sm:py-28 md:py-40 px-5 sm:px-8">
+          <FAQContent />
+        </section>
       </main>
       <Footer />
       {loaded && <Chatbot />}
-      <WeekendSpecialPopup />
     </div>
   );
 }

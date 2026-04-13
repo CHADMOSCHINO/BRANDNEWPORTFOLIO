@@ -4,13 +4,13 @@ import ContactPage from '@/components/ContactPage';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'Contact | Chad Green — Let\'s Build Something Great',
+  title: 'Contact Grellax | Get a Free Quote in 24 Hours',
   description:
-    'Get in touch with Chad Green for premium web design, Shopify stores, and custom web apps. Free 30-minute consultation available.',
+    'Ready to build? Text (919) 526-0824, book a free consultation, or fill out our project form. Custom websites and Shopify stores starting at $500. Response within 24 hours. 25+ five-star Google reviews.',
   openGraph: {
-    title: 'Contact | Chad Green — Let\'s Build Something Great',
+    title: 'Contact Grellax | Get a Free Quote in 24 Hours',
     description:
-      'Get in touch for premium web design, Shopify stores, and custom web apps. Free 30-minute consultation.',
+      'Text us, book a free call, or submit your project details. Custom websites starting at $500. 25+ five-star Google reviews. We respond within 24 hours.',
   },
 };
 

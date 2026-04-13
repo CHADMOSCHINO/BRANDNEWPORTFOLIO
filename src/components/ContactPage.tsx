@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, type FormEvent } from 'react';
 import { PERSONAL, PROJECT_TYPES, BUDGET_RANGES } from '@/lib/constants';
 import type { ContactFormData } from '@/types';
-import { Mail, Calendar, MapPin, Instagram, CheckCircle2, AlertCircle, ArrowUpRight, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, CheckCircle2, AlertCircle, ArrowUpRight, Send } from 'lucide-react';
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -329,19 +329,34 @@ export default function ContactPage() {
               <ArrowUpRight className="w-4 h-4 text-zinc-700 group-hover:text-white shrink-0 mt-1 transition-colors duration-300" />
             </a>
 
+            {/* Text card */}
+            <a
+              href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I'm reaching out from your site.")}`}
+              className="group flex items-start gap-4 bg-white/[0.03] border border-white/[0.06] rounded-2xl p-5 hover:bg-white/[0.05] hover:border-white/[0.1] transition-all duration-300"
+            >
+              <div className="w-10 h-10 rounded-xl bg-white/[0.05] flex items-center justify-center shrink-0">
+                <Phone className="w-4 h-4 text-zinc-400" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] text-zinc-500 tracking-[0.2em] uppercase font-light mb-1">Text Me</p>
+                <p className="text-sm text-white font-light">(919) 526-0824</p>
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-zinc-700 group-hover:text-white shrink-0 mt-1 transition-colors duration-300" />
+            </a>
+
             {/* Calendly card */}
             <a
               href={PERSONAL.calendly}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-start gap-4 bg-white/[0.03] border border-white/[0.06] rounded-2xl p-5 hover:bg-white/[0.05] hover:border-white/[0.1] transition-all duration-300"
+              className="group flex items-start gap-4 bg-white/[0.02] border border-white/[0.04] rounded-2xl p-5 hover:bg-white/[0.05] hover:border-white/[0.1] transition-all duration-300"
             >
               <div className="w-10 h-10 rounded-xl bg-white/[0.05] flex items-center justify-center shrink-0">
-                <Calendar className="w-4 h-4 text-zinc-400" />
+                <Mail className="w-4 h-4 text-zinc-500" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] text-zinc-500 tracking-[0.2em] uppercase font-light mb-1">Book a Call</p>
-                <p className="text-sm text-white font-light">Free 30-min consultation</p>
+                <p className="text-[10px] text-zinc-600 tracking-[0.2em] uppercase font-light mb-1">Book a Call</p>
+                <p className="text-sm text-zinc-400 font-light">Free 15-min consultation</p>
               </div>
               <ArrowUpRight className="w-4 h-4 text-zinc-700 group-hover:text-white shrink-0 mt-1 transition-colors duration-300" />
             </a>

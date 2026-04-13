@@ -1,3 +1,8 @@
+export interface ProjectMetric {
+  label: string;
+  value: string;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -9,6 +14,8 @@ export interface Project {
   color: string;
   externalUrl: string;
   isShopify: boolean;
+  metrics?: ProjectMetric[];
+  scope?: string[];
 }
 
 export interface Service {
@@ -33,6 +40,7 @@ export interface ChatMessage {
   id: string;
   role: 'user' | 'bot';
   content: string;
+  suggestions?: string[];
 }
 
 export interface QAEntry {

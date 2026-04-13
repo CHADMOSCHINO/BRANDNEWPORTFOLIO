@@ -18,7 +18,7 @@ function useInView(ref: React.RefObject<HTMLElement | null>, threshold = 0.15) {
   return inView;
 }
 
-/* ── Slice overlays — auto-reveal on scroll, hover on desktop ── */
+/* ── Slice overlays — reveal on scroll, hover re-trigger on desktop ── */
 
 function VerticalSlices({ bg, revealed }: { bg: string; revealed: boolean }) {
   const delays = [0, 50, 100, 150, 200];
@@ -27,10 +27,10 @@ function VerticalSlices({ bg, revealed }: { bg: string; revealed: boolean }) {
       {delays.map((delay, i) => (
         <div
           key={i}
-          className={`flex-1 transform ${
+          className={`flex-1 will-change-transform ${
             i % 2 === 0 ? 'origin-top' : 'origin-bottom'
           } transition-transform duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${
-            revealed ? 'scale-y-0' : 'scale-y-100 lg:group-hover:scale-y-0'
+            revealed ? 'scale-y-0' : 'scale-y-100'
           }`}
           style={{ backgroundColor: bg, transitionDelay: revealed ? `${300 + delay}ms` : `${delay}ms` }}
         />
@@ -46,10 +46,10 @@ function HorizontalSlices({ bg, revealed }: { bg: string; revealed: boolean }) {
       {delays.map((delay, i) => (
         <div
           key={i}
-          className={`flex-1 transform ${
+          className={`flex-1 will-change-transform ${
             i % 2 === 0 ? 'origin-left' : 'origin-right'
           } transition-transform duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${
-            revealed ? 'scale-x-0' : 'scale-x-100 lg:group-hover:scale-x-0'
+            revealed ? 'scale-x-0' : 'scale-x-100'
           }`}
           style={{ backgroundColor: bg, transitionDelay: revealed ? `${300 + delay}ms` : `${delay}ms` }}
         />
@@ -62,8 +62,8 @@ function DiagonalWipe({ bg, revealed }: { bg: string; revealed: boolean }) {
   return (
     <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
       <div
-        className={`absolute inset-[-50%] rotate-45 transition-transform duration-[1.2s] ease-[cubic-bezier(0.77,0,0.175,1)] ${
-          revealed ? 'translate-x-[150%]' : 'translate-x-0 lg:group-hover:translate-x-[150%]'
+        className={`absolute inset-[-50%] rotate-45 will-change-transform transition-transform duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] ${
+          revealed ? 'translate-x-[150%]' : 'translate-x-0'
         }`}
         style={{ backgroundColor: bg, transitionDelay: revealed ? '300ms' : '0ms' }}
       />
@@ -74,37 +74,69 @@ function DiagonalWipe({ bg, revealed }: { bg: string; revealed: boolean }) {
 /* ── Project Card ───────────────────────────────────────────────── */
 
 function ProjectCard({ project, index }: { project: typeof PROJECTS[number]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, 0.15);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  // Observe a non-sticky sentinel element instead of the sticky card itself.
+  // Sticky elements fill the viewport once stuck, making IntersectionObserver
+  // fire immediately. The sentinel stays in normal document flow.
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setInView(true);
+      },
+      { rootMargin: '0px 0px -30% 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
   const isEven = index % 2 === 0;
   const bgColors = ['#050505', '#080808', '#0a0a0a', '#070707'];
   const bg = bgColors[index % bgColors.length];
   const sliceType = index % 3;
 
   return (
+    <>
     <div
-      ref={ref}
+      ref={sentinelRef}
+      className="w-full pointer-events-none"
+      style={{ height: 1, marginTop: index > 0 ? 'max(5vh, 60px)' : undefined }}
+    />
+    <div
       className="sticky top-0 h-screen w-full"
-      style={{ zIndex: index + 1, marginTop: index > 0 ? '5vh' : undefined }}
+      style={{ zIndex: index + 1 }}
     >
       <div
         className="h-full w-full flex items-center justify-center p-6 sm:p-8 md:p-10 lg:p-16 overflow-hidden rounded-t-[2.5rem] border-t border-white/5"
-        style={{
-          backgroundColor: bg,
-          boxShadow: `0 -${20 + index * 10}px ${50 + index * 10}px rgba(0,0,0,${0.8 + index * 0.02})`,
-        }}
+        style={{ backgroundColor: bg }}
       >
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-24 items-center">
-          {/* Text — fades in on scroll */}
+          {/* Text */}
           <div
-            className={`flex flex-col gap-5 lg:gap-8 lg:col-span-5 transition-all duration-1000 ease-out ${
+            className={`flex flex-col gap-5 lg:gap-8 lg:col-span-5 ${
               isEven ? 'order-2 lg:order-1' : 'order-2 lg:order-2 lg:pl-8'
-            } ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+            }`}
+            style={{
+              opacity: inView ? 1 : 0,
+              transform: inView ? 'none' : 'translateY(12px)',
+              transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+            }}
           >
             <div className="flex items-center gap-4">
-              <div className="w-1.5 h-1.5 rounded-full bg-white" />
-              <span className="text-[10px] text-zinc-400 tracking-[0.2em] uppercase font-light">
-                {project.category}
+              {project.stats === 'Active Build' ? (
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+              ) : (
+                <div className="w-1.5 h-1.5 rounded-full bg-white" />
+              )}
+              <span className={`text-[10px] tracking-[0.2em] uppercase font-light ${
+                project.stats === 'Active Build' ? 'text-emerald-400' : 'text-zinc-400'
+              }`}>
+                {project.stats === 'Active Build' ? 'Currently Building' : project.category}
               </span>
             </div>
             <h2 className="text-4xl sm:text-5xl lg:text-7xl font-light tracking-tighter text-white leading-[0.9]">
@@ -113,6 +145,29 @@ function ProjectCard({ project, index }: { project: typeof PROJECTS[number]; ind
             <p className="text-zinc-500 font-light text-sm max-w-md leading-relaxed hidden sm:block">
               {project.description}
             </p>
+
+            {/* Scope tags */}
+            {project.scope && project.scope.length > 0 && (
+              <div className="flex items-center gap-2 flex-wrap">
+                {project.scope.map((tag, si) => (
+                  <span key={si} className="text-[9px] text-zinc-500 tracking-widest uppercase border border-zinc-800 rounded-full px-3 py-1">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Performance metrics */}
+            {project.metrics && project.metrics.length > 0 && (
+              <div className="flex items-center gap-5 sm:gap-6 mt-1">
+                {project.metrics.map((metric, mi) => (
+                  <div key={mi} className="flex flex-col items-start gap-0.5">
+                    <span className="text-white text-sm sm:text-base font-light tracking-tight">{metric.value}</span>
+                    <span className="text-[8px] sm:text-[9px] text-zinc-600 tracking-[0.15em] uppercase">{metric.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div className="flex items-center gap-4 flex-wrap mt-2">
               <a
@@ -136,29 +191,54 @@ function ProjectCard({ project, index }: { project: typeof PROJECTS[number]; ind
             </div>
           </div>
 
-          {/* Image — clickable link, slices auto-reveal on scroll */}
+          {/* Image with slice reveals */}
           <a
             href={project.externalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`lg:col-span-7 relative aspect-[4/3] lg:aspect-video w-full group overflow-hidden cursor-pointer rounded-sm transition-all duration-1000 delay-150 ease-out block ${
+            className={`lg:col-span-7 relative aspect-[4/3] lg:aspect-video w-full group overflow-hidden cursor-pointer rounded-sm block ${
               isEven ? 'order-1 lg:order-2' : 'order-1 lg:order-1'
-            } ${inView ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.92]'}`}
-            style={{ backgroundColor: bg }}
+            }`}
+            style={{
+              backgroundColor: bg,
+              opacity: inView ? 1 : 0,
+              transition: 'opacity 0.5s ease-out 0.1s',
+            }}
           >
             <Image
               src={project.image}
               alt={project.title}
               fill
-              className={`object-cover transition-all duration-1000 ease-out ${
-                inView
-                  ? 'opacity-100 lg:group-hover:scale-105'
-                  : 'opacity-0'
-              }`}
+              className="object-cover lg:group-hover:scale-[1.02] transition-transform duration-500 ease-out"
               sizes="(max-width: 1024px) 100vw, 60vw"
             />
 
-            {/* Slice overlays — auto-reveal when scrolled into view */}
+            {/* Click-to-view overlay */}
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors duration-300">
+              <div className="flex items-center gap-2 bg-black/50 border border-white/20 rounded-full px-5 py-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="text-[11px] text-white tracking-[0.15em] uppercase font-light">
+                  View Live Site
+                </span>
+                <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Active build badge */}
+            {project.stats === 'Active Build' && (
+              <div className="absolute top-3 left-3 z-20 flex items-center gap-2 bg-black/60 border border-emerald-500/30 rounded-full px-3 py-1.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span className="text-[9px] text-emerald-400 tracking-widest uppercase font-light">
+                  In Progress
+                </span>
+              </div>
+            )}
+
+            {/* Slice overlays — reveal on scroll */}
             {sliceType === 0 && <VerticalSlices bg={bg} revealed={inView} />}
             {sliceType === 1 && <HorizontalSlices bg={bg} revealed={inView} />}
             {sliceType === 2 && <DiagonalWipe bg={bg} revealed={inView} />}
@@ -166,6 +246,7 @@ function ProjectCard({ project, index }: { project: typeof PROJECTS[number]; ind
         </div>
       </div>
     </div>
+    </>
   );
 }
 

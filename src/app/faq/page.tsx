@@ -4,8 +4,8 @@ import Footer from '@/components/Footer';
 import FAQContent from '@/components/FAQContent';
 
 export const metadata: Metadata = {
-  title: 'FAQ | Grellax Labs — Frequently Asked Questions',
-  description: 'Common questions about working with Grellax Labs — pricing, timelines, process, and more.',
+  title: 'FAQ | Grellax | Pricing, Timelines, and How We Work',
+  description: 'Everything you need to know before hiring Grellax. How much does a website cost? How fast do we deliver? What is the process? Get clear answers to the most common questions.',
 };
 
 export default function FAQPage() {

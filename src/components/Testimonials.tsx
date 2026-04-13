@@ -80,7 +80,7 @@ export default function Testimonials() {
         {items.map((t, i) => (
           <div
             key={`${t.id}-${i}`}
-            className="group flex-shrink-0 w-[320px] sm:w-[380px] md:w-[440px] bg-gradient-to-b from-[#0a0a0a] to-[#060606] border border-white/[0.04] p-6 sm:p-8 md:p-10 rounded-xl sm:rounded-2xl hover:border-white/[0.1] transition-all duration-700 relative overflow-hidden"
+            className="group flex-shrink-0 w-[min(320px,85vw)] sm:w-[380px] md:w-[440px] bg-gradient-to-b from-[#0a0a0a] to-[#060606] border border-white/[0.04] p-5 sm:p-8 md:p-10 rounded-xl sm:rounded-2xl hover:border-white/[0.1] transition-all duration-700 relative overflow-hidden"
           >
             {/* Radial glow hover effect */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.04),transparent_60%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />

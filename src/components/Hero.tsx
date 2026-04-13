@@ -1,28 +1,62 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
 import { PERSONAL } from '@/lib/constants';
 
-/* ── Floating particles data ── */
-const PARTICLES = Array.from({ length: 12 }, (_, i) => ({
-  id: i,
-  top: `${10 + Math.random() * 80}%`,
-  left: `${5 + Math.random() * 90}%`,
-  opacity: 0.03 + Math.random() * 0.03,
-  duration: `${14 + Math.random() * 10}s`,
-  delay: `${Math.random() * 8}s`,
-  size: 2 + Math.random() * 2,
-}));
+type Particle = {
+  id: number;
+  top: string;
+  left: string;
+  opacity: number;
+  duration: string;
+  delay: string;
+  size: number;
+};
 
 export default function Hero() {
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Force autoplay on mobile — browsers silently reject autoplay even with muted
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.play().catch(() => {
+      // Some browsers need a user gesture; add listener as fallback
+      const tryPlay = () => {
+        video.play().catch(() => {});
+        document.removeEventListener('touchstart', tryPlay);
+        document.removeEventListener('scroll', tryPlay);
+      };
+      document.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+      document.addEventListener('scroll', tryPlay, { once: true, passive: true });
+    });
+  }, []);
+
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 12 }, (_, i) => ({
+        id: i,
+        top: `${10 + Math.random() * 80}%`,
+        left: `${5 + Math.random() * 90}%`,
+        opacity: 0.03 + Math.random() * 0.03,
+        duration: `${14 + Math.random() * 10}s`,
+        delay: `${Math.random() * 8}s`,
+        size: 2 + Math.random() * 2,
+      }))
+    );
+  }, []);
   return (
-    <section className="relative h-[150vh]">
+    <section className="relative h-[150vh] z-[1]">
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-[#020202]">
         {/* ── Background video ── */}
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-[0.18] pointer-events-none"
           aria-hidden="true"
         >
@@ -81,7 +115,7 @@ export default function Hero() {
           />
 
           {/* ── Floating particles — tiny ambient dots ── */}
-          {PARTICLES.map((p) => (
+          {particles.map((p) => (
             <div
               key={p.id}
               className="absolute rounded-full bg-white"
@@ -132,9 +166,9 @@ export default function Hero() {
         </div>
 
         {/* ── Hero content ── */}
-        <div className="z-10 text-center flex flex-col items-center w-full px-5 sm:px-8">
-          {/* Status pill */}
-          <div className="overflow-hidden mb-6 sm:mb-8">
+        <div className="z-10 text-center flex flex-col items-center justify-center w-full px-5 sm:px-8 pt-20 md:pt-28 lg:pt-32">
+          {/* Status pill — mobile only */}
+          <div className="overflow-hidden mb-6 sm:mb-8 md:hidden">
             <div
               className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] backdrop-blur-md"
               style={{ animation: 'revealText 1s var(--ease-out-expo) 2.5s both' }}
@@ -184,10 +218,10 @@ export default function Hero() {
           {/* Subhead */}
           <div className="overflow-hidden mt-8 sm:mt-12 md:mt-16">
             <p
-              className="text-zinc-500 font-light tracking-wide text-[11px] sm:text-xs md:text-sm uppercase max-w-lg mx-auto leading-relaxed px-2"
+              className="text-zinc-500 font-light tracking-wide text-[11px] sm:text-xs md:text-sm uppercase max-w-lg mx-auto leading-relaxed px-2 text-center"
               style={{ animation: 'revealText 1s 3.2s var(--ease-out-expo) both' }}
             >
-              Premium websites &amp; apps — designed, built, and shipped in days. Not months.
+              The websites your competitors don&apos;t want you to have. Designed, built, and shipped in days.
             </p>
           </div>
 
@@ -204,7 +238,7 @@ export default function Hero() {
             </div>
             <div className="w-[1px] h-7 sm:h-8 bg-zinc-800" />
             <div className="flex flex-col items-center gap-1">
-              <span className="text-white text-sm font-light">5–7</span>
+              <span className="text-white text-sm font-light">5 to 7</span>
               <span className="text-[8px] sm:text-[9px] text-zinc-600 tracking-[0.2em] uppercase">
                 Day Delivery
               </span>
@@ -235,17 +269,28 @@ export default function Hero() {
             style={{ animation: 'revealText 1s 3.5s var(--ease-out-expo) forwards' }}
           >
             <a
+              href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I'm interested in working together.")}`}
+              className="group flex items-center gap-4 cursor-pointer"
+            >
+              <span className="text-white text-xs font-light tracking-widest uppercase">
+                Text Me
+              </span>
+              <div className="w-8 h-[1px] bg-zinc-800 group-hover:w-16 group-hover:bg-white transition-all duration-500 ease-out relative overflow-hidden">
+                <div className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+              </div>
+            </a>
+
+            <span className="text-zinc-800 hidden sm:block">/</span>
+
+            <a
               href={PERSONAL.calendly}
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-4 cursor-pointer"
             >
-              <span className="text-white text-xs font-light tracking-widest uppercase">
+              <span className="text-zinc-500 text-xs font-light tracking-widest uppercase hover:text-white transition-colors duration-300">
                 Book A Call
               </span>
-              <div className="w-8 h-[1px] bg-zinc-800 group-hover:w-16 group-hover:bg-white transition-all duration-500 ease-out relative overflow-hidden">
-                <div className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
-              </div>
             </a>
 
             <span className="text-zinc-800 hidden sm:block">/</span>
@@ -262,6 +307,19 @@ export default function Hero() {
             </button>
           </div>
 
+          {/* Phone number for ad traffic / mobile */}
+          <div
+            className="mt-6 opacity-0"
+            style={{ animation: 'revealText 1s 3.7s var(--ease-out-expo) forwards' }}
+          >
+            <a
+              href={`tel:${PERSONAL.phone}`}
+              className="text-[11px] text-zinc-600 font-light tracking-widest hover:text-white transition-colors duration-300"
+            >
+              (919) 526-0824
+            </a>
+          </div>
+
           {/* Immersion slider */}
           <div
             className="flex items-center gap-4 mt-12 sm:mt-16 w-44 sm:w-56 md:w-64 opacity-0"
@@ -275,6 +333,43 @@ export default function Hero() {
               <div className="absolute left-[85%] top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
             </div>
           </div>
+        </div>
+
+        {/* ── Spinning status badge — desktop only ── */}
+        <div
+          className="absolute bottom-8 left-8 z-20 hidden md:block opacity-0"
+          style={{ animation: 'revealText 1s 4.2s var(--ease-out-expo) forwards' }}
+        >
+          <a
+            href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I'm interested in working together.")}`}
+            className="group relative block w-[100px] h-[100px] lg:w-[120px] lg:h-[120px] cursor-pointer"
+          >
+            {/* Spinning text ring */}
+            <svg
+              className="w-full h-full animate-[spin_20s_linear_infinite]"
+              viewBox="0 0 120 120"
+            >
+              <defs>
+                <path
+                  id="circlePath"
+                  d="M 60,60 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0"
+                />
+              </defs>
+              <text className="fill-zinc-500 group-hover:fill-white transition-colors duration-500" style={{ fontSize: '9.8px', letterSpacing: '4.5px', fontWeight: 300 }}>
+                <textPath href="#circlePath">
+                  ACCEPTING CLIENTS &#x2022; OPEN NOW &#x2022;&#160;
+                </textPath>
+              </text>
+            </svg>
+
+            {/* Center pulse dot */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative">
+                <span className="absolute inline-flex h-3 w-3 rounded-full bg-emerald-500/40 animate-ping" />
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(52,211,153,0.5)] group-hover:shadow-[0_0_20px_rgba(52,211,153,0.7)] transition-shadow duration-500" />
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </section>

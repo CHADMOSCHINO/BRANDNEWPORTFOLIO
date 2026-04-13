@@ -60,20 +60,20 @@ export default function ServicesSection() {
       <div className="max-w-7xl mx-auto relative">
         {/* Header */}
         <div
-          className={`mb-14 sm:mb-20 transition-all duration-1000 ease-out ${
+          className={`mb-14 sm:mb-20 transition-all duration-700 ease-out ${
             inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
           <span className="text-[10px] text-zinc-500 tracking-[0.3em] uppercase font-light mb-4 block">
-            What I Do
+            What We Build
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tighter text-white mb-4">
             Three things.{' '}
             <span className="text-zinc-500 italic">Done right.</span>
           </h2>
           <p className="text-zinc-500 text-sm font-light max-w-lg leading-relaxed">
-            No bloated agencies, no template drag-and-drop. Just focused,
-            hand-coded execution from concept to deploy.
+            The difference between a website that sits there and one that
+            actually converts? The code behind it. Every line is intentional.
           </p>
         </div>
 
@@ -121,8 +121,8 @@ export default function ServicesSection() {
                       <span
                         className={`font-light tracking-tighter text-zinc-800 group-hover:text-zinc-700 transition-colors duration-700 ${
                           isHero
-                            ? 'text-6xl sm:text-7xl md:text-8xl'
-                            : 'text-5xl sm:text-6xl'
+                            ? 'text-5xl sm:text-7xl md:text-8xl'
+                            : 'text-4xl sm:text-6xl'
                         }`}
                       >
                         0{i + 1}

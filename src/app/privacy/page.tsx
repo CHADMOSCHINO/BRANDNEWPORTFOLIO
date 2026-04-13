@@ -3,11 +3,11 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Grellax Labs',
-  description: 'Privacy policy for Grellax Labs — how we handle your data.',
+  title: 'Privacy Policy | Grellax',
+  description: 'Privacy policy for Grellax. How we handle your data.',
 };
 
-const LAST_UPDATED = 'February 21, 2026';
+const LAST_UPDATED = 'April 12, 2026';
 
 export default function PrivacyPage() {
   return (
@@ -26,9 +26,11 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-white text-lg font-medium tracking-tight mb-3">Information We Collect</h2>
               <p>
-                When you submit the contact form on our website, we collect your name, email address,
-                project type, budget range, and message content. This information is submitted through
-                Netlify Forms and stored securely on Netlify&apos;s servers.
+                When you contact us via text message, the contact form on our website, or our AI chat
+                assistant, we may collect your name, phone number, email address, project type, budget
+                range, and message content. Form submissions are processed through Netlify Forms and
+                stored securely on Netlify&apos;s servers. Text messages are handled through standard
+                SMS carriers.
               </p>
             </section>
 
@@ -36,8 +38,9 @@ export default function PrivacyPage() {
               <h2 className="text-white text-lg font-medium tracking-tight mb-3">How We Use Your Information</h2>
               <p>
                 We use the information you provide solely to respond to your inquiry, discuss potential
-                projects, and provide our web design and development services. We do not sell, rent, or
-                share your personal information with third parties for marketing purposes.
+                projects, provide project quotes, and deliver our web design, development, and AI
+                automation services. We do not sell, rent, or share your personal information with
+                third parties for marketing purposes.
               </p>
             </section>
 
@@ -63,7 +66,10 @@ export default function PrivacyPage() {
               <h2 className="text-white text-lg font-medium tracking-tight mb-3">Your Rights</h2>
               <p>
                 You may request access to, correction of, or deletion of your personal data at any
-                time by contacting us at{' '}
+                time by texting us at{' '}
+                <a href="sms:+19195260824" className="text-white underline underline-offset-4 hover:text-zinc-300 transition-colors">
+                  (919) 526-0824
+                </a>{' '}or emailing{' '}
                 <a href="mailto:chadmoschino@grellaxlabs.com" className="text-white underline underline-offset-4 hover:text-zinc-300 transition-colors">
                   chadmoschino@grellaxlabs.com
                 </a>.
@@ -73,7 +79,10 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-white text-lg font-medium tracking-tight mb-3">Contact</h2>
               <p>
-                If you have questions about this privacy policy, reach out to us at{' '}
+                If you have questions about this privacy policy, text us at{' '}
+                <a href="sms:+19195260824" className="text-white underline underline-offset-4 hover:text-zinc-300 transition-colors">
+                  (919) 526-0824
+                </a>{' '}or email{' '}
                 <a href="mailto:chadmoschino@grellaxlabs.com" className="text-white underline underline-offset-4 hover:text-zinc-300 transition-colors">
                   chadmoschino@grellaxlabs.com
                 </a>.

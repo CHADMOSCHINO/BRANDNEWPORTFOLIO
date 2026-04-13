@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { X, Check, Lock, ArrowRight } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { X, Check, Lock, ArrowRight, MessageCircle } from 'lucide-react';
 import { PERSONAL } from '@/lib/constants';
 
 const STORAGE_KEY = 'glx_popup_dismissed';
@@ -31,6 +31,18 @@ export default function WeekendSpecialPopup() {
     } catch {}
     setTimeout(() => setVisible(false), 350);
   };
+
+  const stars = useMemo(() =>
+    Array.from({ length: 40 }, (_, i) => ({
+      id: i,
+      width: Math.random() > 0.8 ? 2 : 1,
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      opacity: 0.15 + Math.random() * 0.4,
+      duration: `${2 + Math.random() * 4}s`,
+      delay: `${Math.random() * 3}s`,
+    })),
+  []);
 
   if (!visible) return null;
 
@@ -64,17 +76,17 @@ export default function WeekendSpecialPopup() {
         />
 
         {/* Star particles */}
-        {Array.from({ length: 40 }).map((_, i) => (
+        {stars.map((s) => (
           <div
-            key={i}
+            key={s.id}
             className="absolute rounded-full bg-white"
             style={{
-              width: Math.random() > 0.8 ? 2 : 1,
-              height: Math.random() > 0.8 ? 2 : 1,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              opacity: 0.15 + Math.random() * 0.4,
-              animation: `starTwinkle ${2 + Math.random() * 4}s ease-in-out ${Math.random() * 3}s infinite`,
+              width: s.width,
+              height: s.width,
+              top: s.top,
+              left: s.left,
+              opacity: s.opacity,
+              animation: `starTwinkle ${s.duration} ease-in-out ${s.delay} infinite`,
             }}
           />
         ))}
@@ -176,9 +188,7 @@ export default function WeekendSpecialPopup() {
 
           {/* ── CTA Button — glowing green ── */}
           <a
-            href={PERSONAL.calendly}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I'm interested in the $200 Weekend Special.")}`}
             className="group relative inline-flex items-center justify-center w-full max-w-[280px] mx-auto rounded-full overflow-hidden"
           >
             <div
@@ -189,14 +199,15 @@ export default function WeekendSpecialPopup() {
               }}
             />
             <div className="absolute inset-0 rounded-full border border-emerald-400/30 group-hover:border-emerald-400/50 transition-colors duration-300" />
-            <span className="relative z-10 px-8 py-3.5 text-[12px] text-white font-bold tracking-[0.2em] uppercase">
-              Claim This Offer
+            <span className="relative z-10 px-8 py-3.5 text-[12px] text-white font-bold tracking-[0.2em] uppercase flex items-center gap-2">
+              <MessageCircle className="w-4 h-4" />
+              Text Me for Details
             </span>
           </a>
 
           {/* Urgency */}
           <p className="text-[11px] text-zinc-500 font-light mt-5 mb-6">
-            Offer valid through Sunday — Limited slots available.
+            Offer valid through Sunday. Limited slots available.
           </p>
 
           {/* Divider */}
@@ -209,11 +220,13 @@ export default function WeekendSpecialPopup() {
 
           {/* Secondary CTA */}
           <a
-            href={`mailto:${PERSONAL.email}?subject=Weekend Special — $200 Website`}
+            href={PERSONAL.calendly}
+            target="_blank"
+            rel="noopener noreferrer"
             className="group inline-flex items-center gap-2 text-zinc-500 hover:text-white transition-colors duration-300"
           >
             <span className="text-[12px] font-light tracking-wide">
-              Let&apos;s book your spot!
+              Or book a call instead
             </span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
           </a>

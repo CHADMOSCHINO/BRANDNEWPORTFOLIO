@@ -66,7 +66,7 @@ export default function GoogleReviews() {
       className="relative z-40 bg-[#020202] py-16 sm:py-24 border-t border-white/5"
     >
       <div
-        className={`max-w-3xl mx-auto px-5 sm:px-8 md:px-20 transition-all duration-1000 ease-out ${
+        className={`max-w-3xl mx-auto px-5 sm:px-8 md:px-20 transition-all duration-700 ease-out ${
           visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}
       >
@@ -87,7 +87,7 @@ export default function GoogleReviews() {
             <div className="flex flex-col items-start gap-1">
               <StarDisplay rating={5} />
               <span className="text-[10px] text-zinc-500 tracking-wider uppercase">
-                30+ Reviews
+                25+ Five-Star Reviews
               </span>
             </div>
           </div>

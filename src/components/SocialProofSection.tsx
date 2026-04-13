@@ -4,18 +4,18 @@ import { useEffect, useRef, useState } from 'react';
 
 /* ── Pain-point bullets ── */
 const PAIN_POINTS = [
-  { prefix: 'Forget hiring', bold: 'designers, devs and CRO experts', suffix: 'separately' },
-  { prefix: 'No more micromanaging', bold: '3+ people', suffix: 'to fix one product page' },
-  { prefix: 'Stop', bold: 'chasing updates, fixes and endless testing', suffix: '' },
-  { prefix: 'Say bye to', bold: 'overpriced one-off agencies', suffix: '' },
-  { prefix: 'Skip', bold: 'back-and-forths and unclear responsibilities', suffix: '' },
+  { prefix: 'While you wait weeks,', bold: 'your competitors are launching', suffix: '' },
+  { prefix: 'Every day without a real site is', bold: 'revenue you never recover', suffix: '' },
+  { prefix: 'Agencies charge $10K+ for what', bold: 'one focused developer ships in days', suffix: '' },
+  { prefix: 'Template sites look like templates.', bold: 'Your customers notice', suffix: '' },
+  { prefix: 'The right website doesn\'t cost money.', bold: 'It makes money', suffix: '' },
 ];
 
 /* ── Bottom metrics ── */
 const METRICS = [
-  { value: 50, suffix: '+', label: 'design and dev upgrades shipped' },
-  { value: 90, suffix: '%', label: 'tasks completed without revision' },
-  { value: 48, suffix: 'h', label: 'average delivery on non-urgent requests' },
+  { value: 50, suffix: '+', label: 'brands transformed' },
+  { value: 90, suffix: '%', label: 'delivered without a single revision' },
+  { value: 5, suffix: '-7d', label: 'from first call to live site' },
 ];
 
 /* ── Count-up hook ── */
@@ -79,7 +79,7 @@ export default function SocialProofSection() {
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.08 },
+      { threshold: 0.05, rootMargin: '100px 0px' },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -88,7 +88,7 @@ export default function SocialProofSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 bg-[#020202] py-24 sm:py-32 md:py-40 px-5 sm:px-8 overflow-hidden"
+      className="relative z-10 bg-[#020202] py-16 sm:py-28 md:py-40 px-5 sm:px-8 overflow-hidden"
     >
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none">
@@ -120,9 +120,10 @@ export default function SocialProofSection() {
               className="font-semibold tracking-tight text-white leading-[1.08]"
               style={{ fontSize: 'clamp(2rem, 4.5vw, 3.2rem)' }}
             >
-              We handle the{' '}
+              Your current site is
+              <br />
               <span className="relative inline-block">
-                <span className="relative z-10">problems</span>
+                <span className="relative z-10">costing you money</span>
                 <svg
                   className="absolute -inset-x-2 -bottom-1 w-[calc(100%+16px)] h-[calc(100%+8px)] z-0 -top-1"
                   viewBox="0 0 200 60"
@@ -144,13 +145,10 @@ export default function SocialProofSection() {
                     fill="none"
                   />
                 </svg>
-              </span>{' '}
-              you
-              <br />
-              hate dealing with
+              </span>
             </h2>
             <p className="mt-6 text-zinc-500 text-sm font-light leading-relaxed max-w-md">
-              One developer. Design, code, and strategy — all under one roof. No handoffs, no delays, no excuses.
+              One developer. Design, code, and strategy — all under one roof. The brands that move fast are the ones that win.
             </p>
           </div>
 

@@ -44,7 +44,7 @@ const SERVICES = [
     icon: Bot,
     title: 'AI & custom automation',
     description:
-      'Custom chatbots trained on your business data, workflow automations via n8n and custom code — designed to boost conversions and elevate user experience.',
+      'Custom chatbots trained on your business data, workflow automations via n8n and custom code. Designed to boost conversions and elevate user experience.',
   },
 ];
 
@@ -76,7 +76,7 @@ export default function RetainerServices() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 bg-[#020202] py-24 sm:py-32 md:py-40 px-5 sm:px-8 overflow-hidden"
+      className="relative z-10 bg-[#020202] py-16 sm:py-28 md:py-40 px-5 sm:px-8 overflow-hidden"
     >
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* ── Headline ── */}

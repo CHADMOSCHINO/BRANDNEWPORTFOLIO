@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { PERSONAL } from '@/lib/constants';
 import { Instagram } from 'lucide-react';
@@ -39,7 +40,7 @@ export default function Footer() {
   return (
     <footer
       id="contact"
-      className="relative z-40 bg-[#020202] border-t border-white/5 min-h-[70vh] sm:min-h-[80vh] flex flex-col items-center justify-center px-5 sm:px-8 md:px-20 pt-16 sm:pt-20 pb-28 sm:pb-20 overflow-hidden"
+      className="relative z-40 bg-[#020202] border-t border-white/5 min-h-[60vh] sm:min-h-[80vh] flex flex-col items-center justify-center px-5 sm:px-8 md:px-20 pt-14 sm:pt-20 pb-24 sm:pb-20 overflow-hidden"
     >
       {/* Ambient glow */}
       <div
@@ -62,44 +63,54 @@ export default function Footer() {
         >
           <h2
             className="font-light tracking-tighter text-white leading-none group-hover:text-transparent transition-colors duration-500 uppercase break-all sm:break-normal"
-            style={{ fontSize: 'clamp(1.2rem, 4.5vw, 3.5rem)' }}
+            style={{ fontSize: 'clamp(1.4rem, 4.5vw, 3.5rem)' }}
           >
             <FlickerEmail email={PERSONAL.email} />
           </h2>
           <h2
             className="font-light tracking-tighter text-white leading-none absolute top-0 left-0 w-full h-full text-center transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.77,0,0.175,1)] uppercase break-all sm:break-normal"
-            style={{ fontSize: 'clamp(1.2rem, 4.5vw, 3.5rem)' }}
+            style={{ fontSize: 'clamp(1.4rem, 4.5vw, 3.5rem)' }}
           >
             {PERSONAL.email}
           </h2>
         </a>
 
-        {/* Book a call CTA */}
-        <a
-          href={PERSONAL.calendly}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group mt-8 sm:mt-10 inline-flex items-center gap-3 border border-white/10 rounded-full px-6 sm:px-8 py-3 sm:py-3.5 hover:bg-white/5 hover:border-white/20 transition-all duration-300"
-        >
-          <span className="text-[11px] text-white tracking-[0.15em] uppercase font-light">
-            Schedule a Call
-          </span>
-          <svg
-            className="w-3 h-3 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all duration-300"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
+        {/* CTA row */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mt-8 sm:mt-10">
+          <a
+            href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I saw your site and I'm interested in working together.")}`}
+            className="group inline-flex items-center gap-3 border border-white/10 rounded-full px-6 sm:px-8 py-3 sm:py-3.5 hover:bg-white/5 hover:border-white/20 transition-all duration-300"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-          </svg>
-        </a>
+            <span className="text-[11px] text-white tracking-[0.15em] uppercase font-light">
+              Text Me
+            </span>
+            <svg
+              className="w-3 h-3 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all duration-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+            </svg>
+          </a>
+          <a
+            href={PERSONAL.calendly}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] text-zinc-600 tracking-[0.15em] uppercase font-light hover:text-white transition-colors duration-300"
+          >
+            or book a call
+          </a>
+        </div>
 
         {/* Bio with headshot */}
         <div className="mt-10 sm:mt-14 flex flex-col items-center">
-          <img
+          <Image
             src="/chad-headshot.png"
-            alt="Chad Green — Founder of Grellax Labs"
+            alt="Chad Green, Founder of Grellax"
+            width={80}
+            height={80}
             className="w-20 h-20 rounded-full object-cover grayscale mb-5 border-2 border-white/[0.06]"
           />
           <p className="text-zinc-500 font-light text-sm leading-relaxed max-w-md mx-auto text-center">
@@ -186,10 +197,10 @@ export default function Footer() {
         {/* Credits */}
         <div className="mt-6 sm:mt-8 flex flex-col items-center gap-2">
           <span className="text-[10px] text-zinc-600 font-light uppercase tracking-widest">
-            by Grellax Labs — designed and coded
+            by Grellax. Designed and coded.
           </span>
           <span className="text-[10px] text-zinc-700 font-light uppercase tracking-widest">
-            &copy; {new Date().getFullYear()} Grellax Labs. All Rights Reserved.
+            &copy; {new Date().getFullYear()} Grellax. All Rights Reserved.
           </span>
         </div>
       </div>
@@ -202,7 +213,7 @@ export default function Footer() {
         <div
           className="text-center font-black uppercase tracking-tighter leading-none"
           style={{
-            fontSize: 'clamp(7rem, 28vw, 32rem)',
+            fontSize: 'clamp(4rem, 28vw, 32rem)',
             color: 'transparent',
             background: 'linear-gradient(to top, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 50%, transparent 100%)',
             WebkitBackgroundClip: 'text',

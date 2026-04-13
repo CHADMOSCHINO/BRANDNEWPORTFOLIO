@@ -3,11 +3,11 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy | Grellax Labs',
-  description: 'Cookie policy for Grellax Labs — what cookies we use and why.',
+  title: 'Cookie Policy | Grellax',
+  description: 'Cookie policy for Grellax. What cookies we use and why.',
 };
 
-const LAST_UPDATED = 'February 21, 2026';
+const LAST_UPDATED = 'April 12, 2026';
 
 export default function CookiesPage() {
   return (
@@ -38,11 +38,11 @@ export default function CookiesPage() {
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-zinc-600 mt-1.5 shrink-0" />
-                  <span><span className="text-white font-normal">Essential cookies</span> — Required for the website to function properly. These cannot be disabled.</span>
+                  <span><span className="text-white font-normal">Essential cookies</span>: Required for the website to function properly. These cannot be disabled.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-zinc-600 mt-1.5 shrink-0" />
-                  <span><span className="text-white font-normal">Analytics cookies</span> — Help us understand page views and site performance. This data is anonymized.</span>
+                  <span><span className="text-white font-normal">Analytics cookies</span>: Help us understand page views and site performance. This data is anonymized.</span>
                 </li>
               </ul>
             </section>
@@ -51,8 +51,8 @@ export default function CookiesPage() {
               <h2 className="text-white text-lg font-medium tracking-tight mb-3">Third-Party Cookies</h2>
               <p>
                 We do not use third-party advertising cookies. If you interact with embedded
-                content (such as Calendly for scheduling), those services may set their own
-                cookies according to their respective policies.
+                content or external services (such as scheduling tools), those services may set
+                their own cookies according to their respective policies.
               </p>
             </section>
 
@@ -69,7 +69,10 @@ export default function CookiesPage() {
             <section>
               <h2 className="text-white text-lg font-medium tracking-tight mb-3">Contact</h2>
               <p>
-                Questions about our cookie practices? Email{' '}
+                Questions about our cookie practices? Text us at{' '}
+                <a href="sms:+19195260824" className="text-white underline underline-offset-4 hover:text-zinc-300 transition-colors">
+                  (919) 526-0824
+                </a>{' '}or email{' '}
                 <a href="mailto:chadmoschino@grellaxlabs.com" className="text-white underline underline-offset-4 hover:text-zinc-300 transition-colors">
                   chadmoschino@grellaxlabs.com
                 </a>.

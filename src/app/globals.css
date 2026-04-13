@@ -30,7 +30,7 @@ body::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 50;
   pointer-events: none;
   opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -155,37 +155,30 @@ body::after {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Weekend Special Popup ── */
-@keyframes starTwinkle {
-  0%, 100% { opacity: 0.15; }
-  50% { opacity: 0.6; }
-}
-@keyframes popupFadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-@keyframes popupFadeOut {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
-}
-@keyframes popupScaleIn {
-  0% { opacity: 0; transform: scale(0.92) translateY(20px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-@keyframes popupScaleOut {
-  0% { opacity: 1; transform: scale(1) translateY(0); }
-  100% { opacity: 0; transform: scale(0.95) translateY(10px); }
+/* ── Chatbot typing dots ── */
+@keyframes typingFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-4px); opacity: 1; }
 }
 
-.animate-popup-fade-in {
-  animation: popupFadeIn 0.35s ease-out forwards;
+/* ── Tech marquee ── */
+@keyframes techMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
-.animate-popup-fade-out {
-  animation: popupFadeOut 0.3s ease-in forwards;
+
+.animate-tech-marquee {
+  animation: techMarquee 30s linear infinite;
 }
-.animate-popup-scale-in {
-  animation: popupScaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
-}
-.animate-popup-scale-out {
-  animation: popupScaleOut 0.25s ease-in forwards;
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

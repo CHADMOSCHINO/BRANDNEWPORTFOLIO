@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import ScrollToTop from "@/components/ScrollToTop";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,7 +9,7 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
-const siteUrl = "https://grellaxlabs.com";
+const siteUrl = "https://grellax.agency";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -17,9 +18,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Grellax Labs | #1 Web Services Agency — Fastest Turnarounds",
+  title: "Grellax | Premium Web Design & Shopify Development | 5 to 7 Day Delivery",
   description:
-    "Premium websites, headless Shopify stores, AI integrations, and custom web apps delivered in 5–7 days. 5+ years of design & engineering experience. 50+ brands scaled nationwide.",
+    "Hand-coded websites, headless Shopify stores, and custom web apps built by a real developer. Not templates. Not AI slop. 50+ brands scaled, 5+ years of experience, and 5 to 7 day turnarounds. Based in Raleigh, NC. Serving clients nationwide.",
   keywords: [
     "web design agency Raleigh NC",
     "best web agency East Coast",
@@ -41,32 +42,36 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    siteName: "Grellax Labs",
-    title: "Grellax Labs | #1 Web Services Agency — Fastest Turnarounds",
+    siteName: "Grellax",
+    title: "Grellax | Premium Web Design & Shopify Development | 5 to 7 Day Delivery",
     description:
-      "Premium websites, headless Shopify, AI integrations, and UX-driven web apps. 50+ brands scaled nationwide. Book a free call.",
+      "Custom websites and Shopify stores hand-coded from scratch. No page builders. No shortcuts. 50+ brands delivered with 5 to 7 day turnarounds. Text us to get started.",
     images: [
       {
         url: `${siteUrl}/og-preview.png`,
-        width: 1200,
-        height: 630,
-        alt: "Grellax Labs — Premium Web Design Agency",
+        width: 2752,
+        height: 1536,
+        alt: "Grellax | Premium Web Design Agency",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Grellax Labs | #1 Web Services Agency — Fastest Turnarounds",
+    title: "Grellax | Premium Web Design & Shopify Development",
     description:
-      "Premium websites, AI integrations & custom web apps. 50+ brands scaled. Book a free call.",
+      "Hand-coded websites and Shopify stores. No templates. 50+ brands scaled. 5 to 7 day delivery. Text (919) 526-0824 to start.",
     images: [`${siteUrl}/og-preview.png`],
   },
   icons: {
-    icon: "/favicon.png",
+    icon: "/icon.png",
+    apple: "/icon.png",
   },
   robots: {
     index: true,
     follow: true,
+  },
+  alternates: {
+    canonical: siteUrl,
   },
 };
 
@@ -88,16 +93,16 @@ export default function RootLayout({
         ],
         worksFor: {
           "@type": "Organization",
-          name: "Grellax Labs",
+          name: "Grellax",
         },
       },
       {
         "@type": "LocalBusiness",
-        name: "Grellax Labs",
+        name: "Grellax",
         description:
-          "Premium web design agency delivering custom websites, headless Shopify stores, and full-stack applications in 5–7 days.",
+          "Hand-coded websites, headless Shopify stores, and custom web apps delivered in 5 to 7 days. 50+ brands scaled by a real developer with 5+ years of experience. Based in Raleigh, NC.",
         url: siteUrl,
-        telephone: "",
+        telephone: "+1-919-526-0824",
         email: "chadmoschino@grellaxlabs.com",
         address: {
           "@type": "PostalAddress",
@@ -105,7 +110,7 @@ export default function RootLayout({
           addressRegion: "NC",
           addressCountry: "US",
         },
-        priceRange: "$300 – $4,000+",
+        priceRange: "$500 to $10,000+",
         areaServed: [
           { "@type": "State", name: "North Carolina" },
           { "@type": "Country", name: "United States" },
@@ -127,6 +132,13 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
+        {/* Hidden Netlify form for chatbot lead capture */}
+        <form name="chatbot-leads" data-netlify="true" hidden>
+          <input type="text" name="name" />
+          <input type="tel" name="phone" />
+          <input type="text" name="source" />
+        </form>
+        <ScrollToTop />
         {children}
       </body>
     </html>

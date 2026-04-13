@@ -2,13 +2,15 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { PERSONAL } from '@/lib/constants';
 import { X } from 'lucide-react';
 
 const NAV_LINKS = [
-  { href: '#work', label: 'Work' },
-  { href: '#services', label: 'Services' },
-  { href: '#testimonials', label: 'Testimonials' },
+  { href: '#work', label: 'Our Work' },
+  { href: '#services', label: 'Process' },
+  { href: '#pricing', label: 'Pricing' },
+  { href: '#faq', label: 'FAQ' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -98,6 +100,7 @@ export default function Navbar() {
 
   const scrollTo = useCallback((href: string) => {
     setMenuOpen(false);
+    document.body.style.overflow = '';
 
     // Page route (e.g. /contact)
     if (href.startsWith('/')) {
@@ -118,6 +121,7 @@ export default function Navbar() {
 
   const goToTop = useCallback(() => {
     setMenuOpen(false);
+    document.body.style.overflow = '';
     if (isHome) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -129,13 +133,13 @@ export default function Navbar() {
     <>
       {/* ─── Safe area background — always visible behind status bar ─── */}
       <div
-        className="fixed top-0 left-0 w-full z-[72] pointer-events-none bg-[#020202]"
+        className="fixed top-0 left-0 w-full z-[86] pointer-events-none bg-[#020202]"
         style={{ height: 'env(safe-area-inset-top, 0px)' }}
       />
 
       {/* ─── Scroll progress bar ─── */}
       <div
-        className="fixed left-0 w-full h-[1px] z-[71] pointer-events-none"
+        className="fixed left-0 w-full h-[1px] z-[86] pointer-events-none"
         style={{ top: 'env(safe-area-inset-top, 0px)' }}
       >
         <div
@@ -147,7 +151,7 @@ export default function Navbar() {
       {/* ─── Main Navbar ─── */}
       <nav
         className={`fixed left-0 w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          menuOpen ? 'z-[70]' : 'z-[60]'
+          menuOpen ? 'z-[85]' : 'z-[60]'
         } ${
           hidden && !menuOpen ? '-translate-y-full' : 'translate-y-0'
         } ${
@@ -202,28 +206,37 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Desktop right: availability + CTA */}
+          {/* Desktop right: availability + Talk to James */}
           <div className="hidden lg:flex items-center gap-6">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse-glow" />
               <span className="text-[10px] text-zinc-500 tracking-widest uppercase">Available</span>
             </div>
-            <a
-              href={PERSONAL.calendly}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center gap-3 border border-white/10 rounded-full px-5 py-2.5 hover:bg-white/5 hover:border-white/20 transition-all duration-300"
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('open-chatbot'))}
+              className="group flex items-center gap-3 bg-white/[0.08] border border-white/[0.1] rounded-full pl-1.5 pr-5 py-1.5 hover:bg-white/[0.14] hover:border-white/[0.2] hover:shadow-[0_0_20px_rgba(52,211,153,0.1)] transition-all duration-300 cursor-pointer"
             >
-              <span className="text-[11px] text-white tracking-[0.15em] uppercase font-light">
-                Book a Call
-              </span>
-              <svg
-                className="w-3 h-3 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all duration-300"
-                fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
-            </a>
+              <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/10 shrink-0">
+                <Image
+                  src="/james-headshot.jpg"
+                  alt="James"
+                  width={96}
+                  height={96}
+                  quality={100}
+                  sizes="32px"
+                  className="w-full h-full object-cover object-center"
+                />
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#020202]" />
+              </div>
+              <div className="flex flex-col items-start">
+                <span className="text-[11px] text-white tracking-[0.12em] uppercase font-light leading-tight">
+                  Talk to James
+                </span>
+                <span className="text-[8px] text-emerald-400/70 tracking-widest uppercase font-light leading-tight">
+                  Replies in &lt;60s
+                </span>
+              </div>
+            </button>
           </div>
 
           {/* ─── Mobile right: scroll % + hamburger/close ─── */}
@@ -263,7 +276,7 @@ export default function Navbar() {
 
       {/* ─── Full-screen mobile menu ─── */}
       <div
-        className={`fixed inset-0 z-[65] bg-[#020202] lg:hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`fixed inset-0 z-[80] bg-[#020202] lg:hidden transition-all duration-200 ease-out ${
           menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
         }`}
       >
@@ -292,9 +305,9 @@ export default function Navbar() {
                   onClick={() => scrollTo(item.href)}
                   className="group flex items-center justify-between w-full py-5 border-b border-white/[0.04] text-left active:bg-white/[0.02] transition-colors"
                   style={{
-                    transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
+                    transform: menuOpen ? 'translateY(0)' : 'translateY(12px)',
                     opacity: menuOpen ? 1 : 0,
-                    transition: `transform 600ms cubic-bezier(0.16,1,0.3,1) ${120 + i * 80}ms, opacity 500ms ease ${120 + i * 80}ms`,
+                    transition: `transform 250ms cubic-bezier(0.16,1,0.3,1) ${i * 40}ms, opacity 200ms ease ${i * 40}ms`,
                   }}
                 >
                   <div className="flex items-baseline gap-4">
@@ -326,21 +339,34 @@ export default function Navbar() {
           <div
             className="pb-6 sm:pb-10 space-y-5"
             style={{
-              transform: menuOpen ? 'translateY(0)' : 'translateY(16px)',
+              transform: menuOpen ? 'translateY(0)' : 'translateY(10px)',
               opacity: menuOpen ? 1 : 0,
-              transition: `transform 600ms cubic-bezier(0.16,1,0.3,1) ${120 + NAV_LINKS.length * 80 + 60}ms, opacity 500ms ease ${120 + NAV_LINKS.length * 80 + 60}ms`,
+              transition: `transform 250ms cubic-bezier(0.16,1,0.3,1) ${NAV_LINKS.length * 40 + 40}ms, opacity 200ms ease ${NAV_LINKS.length * 40 + 40}ms`,
             }}
           >
-            {/* CTA */}
-            <a
-              href={PERSONAL.calendly}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center justify-center w-full border border-white/10 text-white rounded-full py-4 text-xs tracking-[0.2em] uppercase font-light hover:bg-white/5 hover:border-white/20 active:bg-white/10 transition-all duration-300"
+            {/* CTA — Talk to James */}
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                setTimeout(() => window.dispatchEvent(new CustomEvent('open-chatbot')), 350);
+              }}
+              className="flex items-center justify-center gap-3 w-full bg-white/[0.06] border border-white/[0.08] text-white rounded-full py-3.5 hover:bg-white/[0.1] hover:border-white/[0.15] active:bg-white/10 transition-all duration-300"
             >
-              Book a Call
-            </a>
+              <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10 shrink-0">
+                <Image
+                  src="/james-headshot.jpg"
+                  alt="James"
+                  width={96}
+                  height={96}
+                  quality={100}
+                  sizes="32px"
+                  className="w-full h-full object-cover object-center"
+                />
+              </div>
+              <span className="text-xs tracking-[0.2em] uppercase font-light">
+                Talk to James
+              </span>
+            </button>
 
             {/* Info row */}
             <div className="flex items-center justify-between text-[10px] text-zinc-600 uppercase tracking-widest">
