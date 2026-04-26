@@ -2,6 +2,9 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { TESTIMONIALS } from '@/lib/constants';
+import TextScramble from '@/components/ui/TextScramble';
+import LetterReveal from '@/components/ui/LetterReveal';
+import SectionHairline from '@/components/ui/SectionHairline';
 
 function StarRating() {
   return (
@@ -54,14 +57,29 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="relative z-40 bg-[#020202] py-20 sm:py-28 border-t border-white/5 overflow-hidden"
+      className="relative z-40 bg-[#020202] py-14 sm:py-20 border-t border-white/5 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-20 mb-12 sm:mb-16">
-        <span className="text-[10px] text-zinc-500 tracking-[0.3em] uppercase font-light mb-3 sm:mb-4 block">
+        <SectionHairline className="mb-14 sm:mb-16" />
+        <TextScramble
+          as="span"
+          className="text-[10px] text-zinc-500 tracking-[0.3em] uppercase font-light mb-3 sm:mb-4 block"
+        >
           Testimonials
-        </span>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light tracking-tighter text-white">
-          Words from <span className="text-zinc-500 italic">those who trusted.</span>
+        </TextScramble>
+        <h2
+          className="font-light tracking-tighter text-white leading-[0.95]"
+          style={{ fontSize: 'clamp(2rem, 6vw, 5rem)' }}
+        >
+          <LetterReveal text="Words from " stagger={60} duration={900} />
+          <LetterReveal
+            as="span"
+            text="those who've trusted us."
+            className="text-zinc-500 italic"
+            stagger={60}
+            duration={900}
+            delay={11 * 60}
+          />
         </h2>
       </div>
 

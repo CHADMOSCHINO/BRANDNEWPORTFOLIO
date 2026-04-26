@@ -25,22 +25,64 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Film grain overlay — adds depth/texture to the dark aesthetic */
+/* Film grain overlay — adds depth/texture to the dark aesthetic. Drifts subtly to mimic 35mm jitter. */
 body::after {
   content: '';
   position: fixed;
-  inset: 0;
+  inset: -20px; /* slight overflow so drift doesn't reveal edges */
   z-index: 50;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 256px 256px;
   mix-blend-mode: overlay;
+  animation: grainDrift 0.8s steps(5) infinite;
+  will-change: transform;
+  transition: opacity 150ms ease-out;
+}
+
+/* Hide grain while the mobile menu is animating / open — prevents flicker through the semi-transparent overlay during fade. */
+body.menu-open::after {
+  opacity: 0;
+}
+
+@keyframes grainDrift {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-3px, 2px); }
+  40%  { transform: translate(2px, -2px); }
+  60%  { transform: translate(-1px, 3px); }
+  80%  { transform: translate(3px, 1px); }
+  100% { transform: translate(0, 0); }
 }
 
 ::selection {
   background: rgba(255, 255, 255, 0.15);
   color: white;
+}
+
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 4px;
+}
+
+/* Kill ALL native video UI — no play/pause button on slow connections,
+   no picture-in-picture, no AirPlay, no context menu */
+video::-webkit-media-controls,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-overlay-play-button,
+video::-webkit-media-controls-start-playback-button,
+video::-webkit-media-controls-enclosure,
+video::-webkit-media-controls-timeline,
+video::-webkit-media-controls-current-time-display,
+video::-webkit-media-controls-time-remaining-display,
+video::-webkit-media-controls-mute-button,
+video::-webkit-media-controls-volume-slider,
+video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 ::-webkit-scrollbar {
@@ -112,6 +154,11 @@ body::after {
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+@keyframes shineText {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 @keyframes gridPulse {

@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 
 const TRUST_ITEMS = [
-  { stat: '50+', label: 'Brands Scaled' },
+  { stat: '50+', label: 'Projects Shipped' },
   { stat: '5 to 7', label: 'Day Delivery' },
   { stat: '95+', label: 'Lighthouse Score' },
-  { stat: '15+', label: 'Sites Monthly' },
+  { stat: '25+', label: 'Five-Star Reviews' },
   { stat: '5+', label: 'Years Experience' },
   { stat: '★', label: 'Shopify Partner' },
 ];

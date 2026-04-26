@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Pen, Bug, Layers, Plug, TrendingUp, Bot } from 'lucide-react';
+import SectionHairline from '@/components/ui/SectionHairline';
 
 const SERVICES = [
   {
@@ -9,35 +10,35 @@ const SERVICES = [
     icon: Pen,
     title: 'Smarter theme design',
     description:
-      'Update layouts, navigation or styling to improve UX experience, loading speed and brand feel, without full redesigns.',
+      'Update layouts, navigation, and styling to improve UX, loading speed, and brand feel — without full redesigns.',
   },
   {
     num: '02',
     icon: Bug,
     title: 'Fast bug resolution',
     description:
-      'From cart glitches to layout bugs, we fix Shopify issues fast, without waiting days for freelancers or support.',
+      'From cart glitches to layout bugs, we fix Shopify issues fast — without waiting days for freelancers or support.',
   },
   {
     num: '03',
     icon: Layers,
     title: 'Feature implementation',
     description:
-      'Add custom sections, filters, upsells, bundles, sticky carts, anything your product team dreams up, we ship it.',
+      'Custom sections, filters, upsells, bundles, sticky carts — anything your product team dreams up, we ship it.',
   },
   {
     num: '04',
     icon: Plug,
     title: 'Third-party integrations',
     description:
-      'We connect your store to CRMs, email tools, loyalty apps, reviews, analytics and more, and test them properly.',
+      'Connect your store to CRMs, email tools, loyalty apps, reviews, and analytics — properly tested, zero guesswork.',
   },
   {
     num: '05',
     icon: TrendingUp,
     title: 'Conversion-focused audits',
     description:
-      'We run regular checks and A/B tests to identify what\'s blocking your conversions, and fix it directly.',
+      'Regular checks and A/B tests to identify what\'s blocking your conversions — then fix it directly.',
   },
   {
     num: '06',
@@ -76,40 +77,19 @@ export default function RetainerServices() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 bg-[#020202] py-16 sm:py-28 md:py-40 px-5 sm:px-8 overflow-hidden"
+      className="relative z-10 bg-[#020202] py-14 sm:py-20 md:py-24 px-5 sm:px-8 overflow-hidden"
     >
       <div className="relative z-10 max-w-6xl mx-auto">
+        <SectionHairline className="mb-10 sm:mb-14" />
         {/* ── Headline ── */}
-        <div className="text-center mb-14 sm:mb-20" style={stagger(0)}>
+        <div className="text-center mb-10 sm:mb-14" style={stagger(0)}>
           <h2
             className="font-semibold tracking-tight text-white leading-[1.1]"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}
           >
             What&apos;s covered in our
             <br />
-            <span className="relative inline-block">
-              <span className="relative z-10">retainer</span>
-              {/* Hand-drawn circle accent */}
-              <svg
-                className="absolute -inset-x-3 -inset-y-2 w-[calc(100%+24px)] h-[calc(100%+16px)] z-0"
-                viewBox="0 0 120 50"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <ellipse
-                  cx="60"
-                  cy="25"
-                  rx="55"
-                  ry="20"
-                  stroke="rgba(255,255,255,0.15)"
-                  strokeWidth="1.5"
-                  strokeDasharray="4 3"
-                  className="animate-[spin_30s_linear_infinite]"
-                  style={{ transformOrigin: '60px 25px' }}
-                />
-              </svg>
-            </span>{' '}
-            services
+            retainer services
           </h2>
         </div>
 

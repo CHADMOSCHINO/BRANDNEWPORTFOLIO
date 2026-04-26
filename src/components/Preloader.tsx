@@ -27,8 +27,12 @@ export default function Preloader() {
       </div>
       <div className="overflow-hidden">
         <h1
-          className="text-4xl md:text-6xl tracking-tighter font-light text-white"
-          style={{ animation: 'revealText 1s var(--ease-out-expo) 0.4s both' }}
+          className="text-4xl md:text-6xl tracking-tighter font-light bg-clip-text text-transparent"
+          style={{
+            animation: 'revealText 1s var(--ease-out-expo) 0.4s both, shineText 2.4s linear 0.4s infinite',
+            backgroundImage: 'linear-gradient(110deg, #404040, 35%, #fff, 50%, #404040, 75%, #404040)',
+            backgroundSize: '200% 100%',
+          }}
         >
           INITIALIZING
         </h1>

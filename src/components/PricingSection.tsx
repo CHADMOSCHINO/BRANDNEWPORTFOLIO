@@ -1,5 +1,9 @@
 'use client';
 
+import TextScramble from '@/components/ui/TextScramble';
+import LetterReveal from '@/components/ui/LetterReveal';
+import SectionHairline from '@/components/ui/SectionHairline';
+
 import { useRef, useEffect, useState } from 'react';
 import { Check, ArrowUpRight } from 'lucide-react';
 import { PERSONAL } from '@/lib/constants';
@@ -148,7 +152,7 @@ export default function PricingSection() {
     <section
       id="pricing"
       ref={sectionRef}
-      className="relative z-10 bg-[#020202] py-20 sm:py-28 md:py-40 px-5 sm:px-8 overflow-hidden"
+      className="relative z-10 bg-[#020202] py-14 sm:py-20 md:py-24 px-5 sm:px-8 overflow-hidden"
     >
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none">
@@ -162,17 +166,28 @@ export default function PricingSection() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
+        <SectionHairline className="mb-14 sm:mb-16" />
         {/* ── Header ── */}
         <div className="text-center mb-16 sm:mb-20" style={stagger(0)}>
-          <span className="text-[10px] text-zinc-500 tracking-[0.3em] uppercase font-light block mb-5">
-            Pricing
-          </span>
-          <h2
-            className="font-light tracking-tighter text-white leading-[1.08]"
-            style={{ fontSize: 'clamp(1.75rem, 4.5vw, 3.5rem)' }}
+          <TextScramble
+            as="span"
+            className="text-[10px] text-zinc-500 tracking-[0.3em] uppercase font-light block mb-5"
           >
-            Transparent pricing.{' '}
-            <span className="text-zinc-500 italic">No surprises.</span>
+            Pricing
+          </TextScramble>
+          <h2
+            className="font-light tracking-tighter text-white leading-[0.95]"
+            style={{ fontSize: 'clamp(2rem, 6vw, 5rem)' }}
+          >
+            <LetterReveal text="Transparent pricing. " stagger={60} duration={900} />
+            <LetterReveal
+              as="span"
+              text="No surprises."
+              className="text-zinc-500 italic"
+              stagger={60}
+              duration={900}
+              delay={20 * 60}
+            />
           </h2>
           <p className="mt-5 text-zinc-500 text-sm font-light max-w-lg mx-auto leading-relaxed">
             50% deposit to start. 50% on completion. Every project includes revisions,

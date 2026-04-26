@@ -1,15 +1,26 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Check, Lock, ArrowRight, MessageCircle } from 'lucide-react';
 import { PERSONAL } from '@/lib/constants';
 
 const STORAGE_KEY = 'glx_popup_dismissed';
 const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000;
 
+type Star = {
+  id: number;
+  width: number;
+  top: string;
+  left: string;
+  opacity: number;
+  duration: string;
+  delay: string;
+};
+
 export default function WeekendSpecialPopup() {
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
+  const [stars, setStars] = useState<Star[]>([]);
 
   useEffect(() => {
     try {
@@ -32,17 +43,20 @@ export default function WeekendSpecialPopup() {
     setTimeout(() => setVisible(false), 350);
   };
 
-  const stars = useMemo(() =>
-    Array.from({ length: 40 }, (_, i) => ({
-      id: i,
-      width: Math.random() > 0.8 ? 2 : 1,
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      opacity: 0.15 + Math.random() * 0.4,
-      duration: `${2 + Math.random() * 4}s`,
-      delay: `${Math.random() * 3}s`,
-    })),
-  []);
+  useEffect(() => {
+    if (!visible || stars.length) return;
+    setStars(
+      Array.from({ length: 40 }, (_, i) => ({
+        id: i,
+        width: Math.random() > 0.8 ? 2 : 1,
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        opacity: 0.15 + Math.random() * 0.4,
+        duration: `${2 + Math.random() * 4}s`,
+        delay: `${Math.random() * 3}s`,
+      }))
+    );
+  }, [visible, stars.length]);
 
   if (!visible) return null;
 

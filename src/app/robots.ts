@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       },
     ],
-    sitemap: 'https://grellaxlabs.com/sitemap.xml',
+    sitemap: 'https://grellax.agency/sitemap.xml',
   };
 }

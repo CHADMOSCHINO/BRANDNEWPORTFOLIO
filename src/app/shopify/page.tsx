@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Custom Shopify Developer | Headless Stores Built from Scratch',
     description:
-      'React-powered Shopify storefronts with zero theme limitations. Hand-coded by a developer with 5+ years and 50+ brands delivered. See live work.',
+      'React-powered Shopify storefronts with zero theme limitations. Hand-coded by a developer with 5+ years of experience and 25+ five-star reviews. See live work.',
   },
 };
 

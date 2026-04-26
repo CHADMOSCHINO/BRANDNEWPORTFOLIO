@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { PERSONAL } from '@/lib/constants';
 import { Instagram } from 'lucide-react';
+import { TextHoverEffect } from '@/components/ui/text-hover-effect';
 
 function FlickerEmail({ email }: { email: string }) {
   return (
@@ -104,18 +105,26 @@ export default function Footer() {
           </a>
         </div>
 
-        {/* Bio with headshot */}
-        <div className="mt-10 sm:mt-14 flex flex-col items-center">
-          <Image
-            src="/chad-headshot.png"
-            alt="Chad Green, Founder of Grellax"
-            width={80}
-            height={80}
-            className="w-20 h-20 rounded-full object-cover grayscale mb-5 border-2 border-white/[0.06]"
-          />
-          <p className="text-zinc-500 font-light text-sm leading-relaxed max-w-md mx-auto text-center">
-            {PERSONAL.bio}
-          </p>
+        {/* Founder card — compact */}
+        <div className="mt-10 sm:mt-12 w-full max-w-xl mx-auto">
+          <div className="bg-white/[0.025] border border-white/[0.06] rounded-xl px-4 py-4 sm:px-5 sm:py-4 flex items-start gap-4 text-left">
+            <Image
+              src="/chad-headshot.png"
+              alt={`${PERSONAL.name}, Founder of Grellax`}
+              width={96}
+              height={96}
+              className="w-11 h-11 sm:w-12 sm:h-12 rounded-lg object-cover border border-white/[0.08] shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-baseline gap-2 mb-1.5">
+                <span className="text-white text-[13px] font-medium tracking-tight">{PERSONAL.name}</span>
+                <span className="text-zinc-500 text-[11px] font-light">Founder, Grellax</span>
+              </div>
+              <p className="text-zinc-400 font-light text-[12px] sm:text-[13px] leading-relaxed">
+                &ldquo;{PERSONAL.bio}&rdquo;
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Stats row */}
@@ -205,24 +214,16 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── CHAD giant overlay text ── */}
+      {/* ── GRELLAX giant interactive text — faded from bottom up ── */}
       <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full pointer-events-none select-none z-[5]"
+        className="absolute -bottom-[8vw] sm:-bottom-[6vw] left-1/2 -translate-x-1/2 w-full z-[5] h-[38vw] sm:h-[28vw] max-h-[22rem]"
         aria-hidden="true"
+        style={{
+          WebkitMaskImage: 'linear-gradient(to top, black 10%, transparent 95%)',
+          maskImage: 'linear-gradient(to top, black 10%, transparent 95%)',
+        }}
       >
-        <div
-          className="text-center font-black uppercase tracking-tighter leading-none"
-          style={{
-            fontSize: 'clamp(4rem, 28vw, 32rem)',
-            color: 'transparent',
-            background: 'linear-gradient(to top, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 50%, transparent 100%)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            transform: 'translateY(30%)',
-          }}
-        >
-          CHAD
-        </div>
+        <TextHoverEffect text="GRELLAX" />
       </div>
     </footer>
   );

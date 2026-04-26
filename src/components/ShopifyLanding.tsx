@@ -171,7 +171,7 @@ export default function ShopifyLanding() {
               <div className="flex flex-col items-center gap-1">
                 <span className="text-white text-sm font-light">50+</span>
                 <span className="text-[8px] sm:text-[9px] text-zinc-600 tracking-[0.2em] uppercase">
-                  Brands Scaled
+                  Projects Shipped
                 </span>
               </div>
               <div className="w-[1px] h-7 sm:h-8 bg-zinc-800" />

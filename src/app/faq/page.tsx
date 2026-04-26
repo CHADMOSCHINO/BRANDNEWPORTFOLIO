@@ -6,6 +6,12 @@ import FAQContent from '@/components/FAQContent';
 export const metadata: Metadata = {
   title: 'FAQ | Grellax | Pricing, Timelines, and How We Work',
   description: 'Everything you need to know before hiring Grellax. How much does a website cost? How fast do we deliver? What is the process? Get clear answers to the most common questions.',
+  alternates: { canonical: 'https://grellax.agency/faq' },
+  openGraph: {
+    title: 'FAQ | Grellax',
+    description: 'Pricing, timelines, and how we work — everything you need to know before hiring Grellax.',
+    url: 'https://grellax.agency/faq',
+  },
 };
 
 export default function FAQPage() {

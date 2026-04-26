@@ -6,7 +6,9 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "600", "700"],
+  display: "swap",
+  preload: true,
 });
 
 const siteUrl = "https://grellax.agency";
@@ -20,7 +22,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Grellax | Premium Web Design & Shopify Development | 5 to 7 Day Delivery",
   description:
-    "Hand-coded websites, headless Shopify stores, and custom web apps built by a real developer. Not templates. Not AI slop. 50+ brands scaled, 5+ years of experience, and 5 to 7 day turnarounds. Based in Raleigh, NC. Serving clients nationwide.",
+    "Hand-coded websites, headless Shopify stores, and custom web apps built by a real developer. Not templates. Not AI slop. 50+ shipped projects, 5+ years of experience, and 5 to 7 day turnarounds. Based in Raleigh, NC. Serving clients nationwide.",
   keywords: [
     "web design agency Raleigh NC",
     "best web agency East Coast",
@@ -45,12 +47,12 @@ export const metadata: Metadata = {
     siteName: "Grellax",
     title: "Grellax | Premium Web Design & Shopify Development | 5 to 7 Day Delivery",
     description:
-      "Custom websites and Shopify stores hand-coded from scratch. No page builders. No shortcuts. 50+ brands delivered with 5 to 7 day turnarounds. Text us to get started.",
+      "Custom websites and Shopify stores hand-coded from scratch. No page builders. No shortcuts. 5+ years, 50+ shipped projects, 5 to 7 day turnarounds. Text us to get started.",
     images: [
       {
         url: `${siteUrl}/og-preview.png`,
-        width: 2752,
-        height: 1536,
+        width: 1920,
+        height: 1071,
         alt: "Grellax | Premium Web Design Agency",
       },
     ],
@@ -59,12 +61,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Grellax | Premium Web Design & Shopify Development",
     description:
-      "Hand-coded websites and Shopify stores. No templates. 50+ brands scaled. 5 to 7 day delivery. Text (919) 526-0824 to start.",
+      "Hand-coded websites and Shopify stores. No templates. 5+ years, 25+ five-star reviews. 5 to 7 day delivery. Text (919) 526-0824 to start.",
     images: [`${siteUrl}/og-preview.png`],
-  },
-  icons: {
-    icon: "/icon.png",
-    apple: "/icon.png",
   },
   robots: {
     index: true,
@@ -100,7 +98,7 @@ export default function RootLayout({
         "@type": "LocalBusiness",
         name: "Grellax",
         description:
-          "Hand-coded websites, headless Shopify stores, and custom web apps delivered in 5 to 7 days. 50+ brands scaled by a real developer with 5+ years of experience. Based in Raleigh, NC.",
+          "Hand-coded websites, headless Shopify stores, and custom web apps delivered in 5 to 7 days. Built by a real developer with 5+ years of experience and 25+ five-star reviews. Based in Raleigh, NC.",
         url: siteUrl,
         telephone: "+1-919-526-0824",
         email: "chadmoschino@grellaxlabs.com",

@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { PERSONAL, PROJECTS, TESTIMONIALS } from '@/lib/constants';
 import { Check, ArrowUpRight, Star } from 'lucide-react';
 import { useRef, useState, useEffect } from 'react';
@@ -30,7 +31,7 @@ const FEATURED = [
 ];
 
 const TRUST_STATS = [
-  { value: '50+', label: 'Brands Scaled' },
+  { value: '50+', label: 'Projects Shipped' },
   { value: '5-7', label: 'Day Delivery' },
   { value: '25+', label: '5-Star Reviews' },
   { value: '5+', label: 'Years Experience' },
@@ -119,8 +120,8 @@ export default function AdsLandingPage() {
           </h1>
 
           <p className="mt-6 text-zinc-500 text-base sm:text-lg font-light max-w-xl mx-auto leading-relaxed">
-            Not a template. Not AI-generated. Custom-built by a developer who&apos;s
-            scaled 50+ brands — from local businesses to 8- and 9-figure clients.
+            Not a template. Not AI-generated. Custom-built by a developer with
+            5+ years of hand-coding — shipping for local businesses and 8- and 9-figure clients.
           </p>
 
           {/* Primary CTA */}
@@ -317,7 +318,7 @@ export default function AdsLandingPage() {
 
       {/* ── Full Portfolio CTA ── */}
       <section className="px-5 sm:px-8">
-        <a
+        <Link
           href="/"
           className="group block max-w-5xl mx-auto rounded-2xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-500 p-8 sm:p-10 text-center"
         >
@@ -328,13 +329,13 @@ export default function AdsLandingPage() {
             className="block font-light tracking-tighter text-white leading-tight mb-3"
             style={{ fontSize: 'clamp(1.25rem, 3vw, 2rem)' }}
           >
-            See all 50+ projects, our process, and the tech behind it
+            See every shipped project, our process, and the tech behind it
           </span>
           <span className="inline-flex items-center gap-2 text-zinc-400 group-hover:text-white text-sm font-light transition-colors duration-300">
             Visit grellax.agency
             <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
           </span>
-        </a>
+        </Link>
       </section>
 
       {/* ── Compact Pricing ── */}
@@ -487,8 +488,8 @@ export default function AdsLandingPage() {
             &copy; {new Date().getFullYear()} Grellax. All Rights Reserved.
           </span>
           <div className="flex items-center gap-6">
-            <a href="/privacy" className="text-[10px] text-zinc-700 font-light tracking-widest uppercase hover:text-zinc-400 transition-colors">Privacy</a>
-            <a href="/" className="text-[10px] text-zinc-700 font-light tracking-widest uppercase hover:text-zinc-400 transition-colors">Main Site</a>
+            <Link href="/privacy" className="text-[10px] text-zinc-700 font-light tracking-widest uppercase hover:text-zinc-400 transition-colors">Privacy</Link>
+            <Link href="/" className="text-[10px] text-zinc-700 font-light tracking-widest uppercase hover:text-zinc-400 transition-colors">Main Site</Link>
           </div>
         </div>
       </footer>

@@ -133,7 +133,7 @@ export default function WeekendSpecialPage() {
 
       if (STRIPE_PAYMENT_LINK && STRIPE_PAYMENT_LINK !== 'PASTE_YOUR_STRIPE_LINK_HERE') {
         setTimeout(() => {
-          window.open(STRIPE_PAYMENT_LINK, '_blank');
+          window.open(STRIPE_PAYMENT_LINK, '_blank', 'noopener,noreferrer');
         }, 1500);
       }
     } catch {
@@ -216,7 +216,7 @@ export default function WeekendSpecialPage() {
             <p className="text-zinc-400 text-sm sm:text-base font-light leading-relaxed max-w-xl mx-auto">
               This isn&apos;t a template. It&apos;s not a drag-and-drop page builder. It&apos;s not
               vibe-coded AI slop. You&apos;re getting a hand-coded, SEO-optimized, mobile-first
-              website from a developer with 5+ years of experience and 50+ brands delivered.
+              website from a developer with 5+ years of experience and 25+ five-star Google reviews.
               Fill out the form below, pay, and we get to work.
             </p>
           </div>

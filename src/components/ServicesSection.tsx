@@ -1,5 +1,9 @@
 'use client';
 
+import TextScramble from '@/components/ui/TextScramble';
+import LetterReveal from '@/components/ui/LetterReveal';
+import SectionHairline from '@/components/ui/SectionHairline';
+
 import { useRef, useEffect, useState } from 'react';
 import { LayoutTemplate, Code2, BarChart3 } from 'lucide-react';
 import { SERVICES } from '@/lib/constants';
@@ -46,7 +50,7 @@ export default function ServicesSection() {
     <section
       id="services"
       ref={ref}
-      className="relative z-40 bg-[#020202] py-20 sm:py-28 md:py-32 px-5 sm:px-8 md:px-20 border-t border-white/5"
+      className="relative z-40 bg-[#020202] py-14 sm:py-20 md:py-24 px-5 sm:px-8 md:px-20 border-t border-white/5"
     >
       {/* Ambient gradient */}
       <div
@@ -58,18 +62,32 @@ export default function ServicesSection() {
       />
 
       <div className="max-w-7xl mx-auto relative">
+        <SectionHairline className="mb-14 sm:mb-16" />
         {/* Header */}
         <div
           className={`mb-14 sm:mb-20 transition-all duration-700 ease-out ${
             inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <span className="text-[10px] text-zinc-500 tracking-[0.3em] uppercase font-light mb-4 block">
+          <TextScramble
+            as="span"
+            className="text-[10px] text-zinc-500 tracking-[0.3em] uppercase font-light mb-4 block"
+          >
             What We Build
-          </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tighter text-white mb-4">
-            Three things.{' '}
-            <span className="text-zinc-500 italic">Done right.</span>
+          </TextScramble>
+          <h2
+            className="font-light tracking-tighter text-white mb-4 leading-[0.95]"
+            style={{ fontSize: 'clamp(2rem, 6vw, 5rem)' }}
+          >
+            <LetterReveal text="Three things. " stagger={60} duration={900} />
+            <LetterReveal
+              as="span"
+              text="Done right."
+              className="text-zinc-500 italic"
+              stagger={60}
+              duration={900}
+              delay={14 * 60}
+            />
           </h2>
           <p className="text-zinc-500 text-sm font-light max-w-lg leading-relaxed">
             The difference between a website that sits there and one that

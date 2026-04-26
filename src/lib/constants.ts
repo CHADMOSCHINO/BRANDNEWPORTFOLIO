@@ -20,6 +20,42 @@ export const PERSONAL = {
 
 export const PROJECTS: Project[] = [
   {
+    id: 'unbornvzn',
+    title: 'Unborn Vision',
+    category: 'AI Content & Digital Products',
+    image: '/unbornvzn-preview.png',
+    stats: 'Live',
+    impact: 'Full UI/UX design and development for an AI content monetization platform. Built to convert traffic into product sales with viral-first design.',
+    description: 'Complete UI/UX design, frontend development, and product architecture for Unborn Vision — an AI content education platform teaching creators how to build $10K/month businesses using AI video tools. Landing pages, product vaults, and conversion funnels built for scale.',
+    color: 'from-violet-600/20 to-purple-500/20',
+    externalUrl: 'https://unbornvzn.com',
+    isShopify: false,
+    scope: ['UI/UX Design', 'Frontend Dev', 'Digital Products', 'Conversion Design'],
+    metrics: [
+      { label: 'Platform', value: 'Live' },
+      { label: 'Focus', value: 'AI Content' },
+      { label: 'Target', value: '$10K/mo' },
+    ],
+  },
+  {
+    id: 'dominican-salon-raleigh',
+    title: 'The Dominican Salon',
+    category: 'Luxury Hair Salon & Local SEO',
+    image: '/dominican-salon-preview.png',
+    stats: 'Live',
+    impact: 'Full UI/UX design and development for a luxury Dominican hair salon in Raleigh, NC. Mobile-first booking experience with bilingual support.',
+    description: 'End-to-end build for The Dominican Salon of Raleigh — a luxury Dominican hair salon offering blowouts, silk press, keratin treatments, and color services. Mobile-first design, online booking integration, Google Maps embed, and bilingual (English/Spanish) user experience. Built to convert local search traffic into booked appointments.',
+    color: 'from-rose-500/20 to-pink-400/20',
+    externalUrl: 'https://thedominicansalon.netlify.app/',
+    isShopify: false,
+    scope: ['UI/UX Design', 'Frontend Dev', 'Local SEO', 'Booking System'],
+    metrics: [
+      { label: 'Location', value: 'Raleigh' },
+      { label: 'Bilingual', value: 'EN/ES' },
+      { label: 'Booking', value: 'Online' },
+    ],
+  },
+  {
     id: 'reloaded-3x',
     title: 'Reloaded 3X',
     category: 'E-Commerce & Brand Revival',
@@ -236,6 +272,10 @@ export const TECH_BADGES = [
   { name: 'TypeScript', color: '#3178C6' },
   { name: 'JavaScript', color: '#F7DF1E' },
   { name: 'Node.js', color: '#339933' },
+  { name: 'Bun', color: '#FBF0DF' },
+  { name: 'Express', color: '#cccccc' },
+  { name: 'Go', color: '#00ADD8' },
+  { name: 'Rust', color: '#DEA584' },
   { name: 'Python', color: '#3776AB' },
   { name: 'Tailwind CSS', color: '#06B6D4' },
   { name: 'Shopify', color: '#96BF48' },
@@ -317,7 +357,7 @@ export const TECH_STACK = [
 export const QA_DATABASE: QAEntry[] = [
   {
     keywords: ['500', 'starter', 'entry', 'deal', 'special', 'offer', 'promo', 'promotion', 'discount', 'cheap', 'affordable', 'landing page deal', 'sale', 'basic'],
-    answer: "Our Starter package is $500 for a premium hand-coded landing page with SEO baked into the codebase, mobile-first design, and a Google Business Profile setup guide. This is real code written by a developer who's built for 50+ brands — not a template. Integrations available at extra cost. Limited spots per month. Text us at (919) 526-0824 or book a call!",
+    answer: "Our Starter package is $500 for a premium hand-coded landing page with SEO baked into the codebase, mobile-first design, and a Google Business Profile setup guide. This is real code written by a developer who's hand-coded for 50+ shipped projects — not a template. Integrations available at extra cost. Limited spots per month. Text us at (919) 526-0824 or book a call!",
   },
   {
     keywords: ['domain', 'domain name', 'buy domain', 'register domain', 'hosting'],
@@ -337,7 +377,7 @@ export const QA_DATABASE: QAEntry[] = [
   },
   {
     keywords: ['pricing', 'cost', 'price', 'how much', 'budget', 'afford', 'expensive', 'money', 'rate', 'rates', 'quote', 'estimate'],
-    answer: "Our pricing: Starter landing pages at $500. Full custom websites from $2,500 to $7,500. Headless Shopify builds from $5,000 to $12,000+. Web apps and complex platforms from $10,000+. Every project is custom-quoted based on scope. We've built for 8- and 9-figure clients and 25+ five-star Google reviews back us up. Text us at (919) 526-0824 to get a custom quote",
+    answer: "Our pricing: Starter landing pages at $500. Full custom websites from $2,500 to $7,500. Headless Shopify builds start at $5,000. Web apps and complex platforms start at $10,000. Every project is custom-quoted based on scope. We've built for 8- and 9-figure clients, and 25+ five-star Google reviews back us up. Text us at (919) 526-0824 for a custom quote.",
   },
   {
     keywords: ['payment', 'pay', 'invoice', 'deposit', 'installment', 'stripe', 'paypal', 'venmo', 'zelle'],
@@ -349,7 +389,7 @@ export const QA_DATABASE: QAEntry[] = [
   },
   {
     keywords: ['services', 'what do you do', 'offer', 'help', 'build', 'provide', 'capabilities'],
-    answer: "Here's what we build: Landing Pages, Full Custom Websites (up to 10+ pages), Headless Shopify Stores, E-Commerce with Stripe, Complete Redesigns, Web Apps & SaaS Dashboards, AI Chatbots & Automations, and Mobile Apps (React Native). Every project includes custom design, hand-coded development, SEO optimization, mobile responsiveness, and 14 days post-launch support.",
+    answer: "Here's what we build: Landing Pages, Full Custom Websites (5 to 10+ pages), Headless Shopify Stores, E-Commerce with Stripe, Complete Redesigns, Web Apps & SaaS Dashboards, AI Chatbots & Automations, and Mobile Apps (React Native). Every project includes custom design, hand-coded development, SEO optimization, mobile responsiveness, and 14 days post-launch support.",
   },
   {
     keywords: ['contact', 'reach', 'email', 'call', 'talk', 'book', 'schedule', 'meeting', 'get started', 'start', 'order', 'buy', 'purchase', 'hire', 'calendly'],
@@ -357,11 +397,11 @@ export const QA_DATABASE: QAEntry[] = [
   },
   {
     keywords: ['experience', 'portfolio', 'work', 'projects', 'examples', 'clients', 'brands', 'past work', 'case study'],
-    answer: "50+ brands scaled across 5+ years. Recent work includes We Care Jamaica (international nonprofit), Repair Wizardz (local service booking), Dreux Hamm (luxury fashion headless Shopify), Dominicans of Raleigh (restaurant), and Saber Tooth Treats (e-commerce concept build). Scroll up to see them all with live links!",
+    answer: "50+ shipped projects across 5+ years of hand-coding. Recent work includes Unborn Vision (AI content monetization platform), The Dominican Salon of Raleigh (luxury hair salon), We Care Jamaica (international nonprofit), Repair Wizardz (local service booking), Dreux Hamm (luxury fashion headless Shopify), and Saber Tooth Treats (e-commerce concept build). Scroll up to see them all with live links!",
   },
   {
     keywords: ['tech', 'stack', 'technology', 'react', 'code', 'framework', 'build with', 'how built', 'next.js', 'nextjs', 'typescript', 'tailwind', 'node'],
-    answer: "Our stack: React, Next.js, TypeScript, Tailwind CSS, Node.js, Python, PostgreSQL, AWS, Docker, GraphQL, Shopify Hydrogen, and Stripe. We also use Claude AI and Cursor for intelligent development workflows. No page builders, no templates. Everything is hand-coded for speed and full control.",
+    answer: "Frontend: React, Next.js, TypeScript, Tailwind CSS. Backend: Node.js, Bun, Express, Go, Rust, Python. Infra: PostgreSQL, AWS, Docker, GraphQL, Shopify Hydrogen, Stripe. We also use Claude AI and Cursor for intelligent development workflows. No page builders, no templates. Everything is hand-coded for speed and full control.",
   },
   {
     keywords: ['location', 'where', 'based', 'timezone', 'local', 'raleigh', 'north carolina', 'nc', 'remote'],
@@ -389,7 +429,7 @@ export const QA_DATABASE: QAEntry[] = [
   },
   {
     keywords: ['hello', 'hi', 'hey', 'sup', 'yo', 'what up', 'good morning', 'good afternoon', 'good evening'],
-    answer: "Hey! Welcome to Grellax. I'm here to help you learn about our services, pricing, and process. We've scaled 50+ brands with 25+ five-star Google reviews. What can I help you with?",
+    answer: "Hey! Welcome to Grellax. I'm here to help you learn about our services, pricing, and process. 50+ shipped projects, 5+ years of hand-coding, 25+ five-star Google reviews. What can I help you with?",
   },
   {
     keywords: ['ai', 'chatbot', 'automation', 'claude', 'anthropic', 'cursor', 'artificial intelligence', 'bot', 'n8n', 'automate', 'workflow'],
@@ -401,11 +441,11 @@ export const QA_DATABASE: QAEntry[] = [
   },
   {
     keywords: ['why', 'different', 'better', 'vs', 'agency', 'freelancer', 'stand out', 'unique', 'advantage'],
-    answer: "What makes us different: Solo developer means no overhead and competitive prices. 5 to 7 day delivery (agencies take weeks). 100% hand-coded, no templates, no page builders. Direct communication with the person actually building your site. 50+ brands scaled. AI and automation built into our workflow. You get agency-quality output at freelancer speed.",
+    answer: "What makes us different: Solo developer means no overhead and competitive prices. 5 to 7 day delivery (agencies take weeks). 100% hand-coded, no templates, no page builders. Direct communication with the person actually building your site. 50+ shipped projects, 25+ five-star reviews. AI and automation built into our workflow. You get agency-quality output at freelancer speed.",
   },
   {
     keywords: ['chad', 'who', 'founder', 'owner', 'about', 'team', 'developer', 'designer', 'background'],
-    answer: "Grellax is run by Chad Green, a 26-year-old designer and full-stack developer based in Raleigh, NC with 5+ years of experience. Chad has scaled 50+ brands ranging from nonprofits to luxury fashion to SaaS platforms. Every client gets world-class results with direct, transparent communication.",
+    answer: "Grellax is run by Chad Green, a 26-year-old designer and full-stack developer based in Raleigh, NC with 5+ years of experience. Chad has shipped projects ranging from nonprofits to luxury fashion to SaaS platforms. Every client gets world-class results with direct, transparent communication.",
   },
   {
     keywords: ['mobile', 'responsive', 'phone', 'tablet', 'iphone', 'android', 'screen size', 'adaptive'],
@@ -437,7 +477,7 @@ export const QA_DATABASE: QAEntry[] = [
   },
   {
     keywords: ['guarantee', 'refund', 'risk', 'satisfaction', 'promise', 'assured'],
-    answer: "We stand behind every project. You get 2 revision rounds to make sure it's exactly right, 14 days of post-launch support, and a full walkthrough video. We don't launch until you're 100% satisfied. Our track record of 50+ happy clients speaks for itself.",
+    answer: "We stand behind every project. You get 2 revision rounds to make sure it's exactly right, 14 days of post-launch support, and a full walkthrough video. We don't launch until you're 100% satisfied. Our track record and 25+ five-star Google reviews speak for themselves.",
   },
   {
     keywords: ['available', 'availability', 'open', 'accepting', 'when', 'capacity', 'waitlist', 'booked'],

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { X, Send, ArrowUpRight, MessageCircle } from 'lucide-react';
 import { QA_DATABASE, PERSONAL } from '@/lib/constants';
 import type { ChatMessage } from '@/types';
+import { HoverBorderGradient } from '@/components/ui/hover-border-gradient';
 
 const MAX_INPUT_LENGTH = 500;
 const MAX_MESSAGES_PER_SESSION = 40;
@@ -159,6 +160,15 @@ export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
   const [promoDismissed, setPromoDismissed] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      if (localStorage.getItem('grellax-james-dismissed') === '1') {
+        setPromoDismissed(true);
+      }
+    } catch {}
+  }, []);
   const [showLeadCapture, setShowLeadCapture] = useState(false);
   const [leadCaptured, setLeadCaptured] = useState(false);
   const [leadName, setLeadName] = useState('');
@@ -168,7 +178,7 @@ export default function Chatbot() {
       id: '0',
       role: 'bot',
       content:
-        "Hey! I'm James, the 24/7 concierge for Grellax. I can answer questions about pricing, services, timelines, and more. We've built for 50+ brands including 8- and 9-figure clients. What can I help you with?",
+        "Hey! I'm James, the 24/7 concierge for Grellax. I can answer questions about pricing, services, timelines, and more — 50+ shipped projects, including 8- and 9-figure clients. What can I help you with?",
       suggestions: ['What do you build?', 'Show me pricing', 'How fast do you deliver?'],
     },
   ]);
@@ -182,15 +192,6 @@ export default function Chatbot() {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!isOpen && !promoDismissed) {
-        setShowPromo(true);
-      }
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, [isOpen, promoDismissed]);
 
   useEffect(() => {
     if (isOpen) setShowPromo(false);
@@ -215,7 +216,7 @@ export default function Chatbot() {
         ? "Hey! Looks like you're interested in a custom Shopify store. We build headless stores for 8- and 9-figure brands. I can walk you through pricing, our process, and show you live builds. What would you like to know?"
         : utmCampaign?.toLowerCase().includes('landing')
         ? "Hey! Looking for a custom site? Our Starter package gets you a hand-coded landing page in 5 days. I can break down everything that's included."
-        : "Hey! Welcome to Grellax. I'm James — 50+ brands scaled, 25+ five-star reviews. I can help with pricing, services, timelines, and more. What brings you here today?";
+        : "Hey! Welcome to Grellax. I'm James — 50+ shipped projects, 25+ five-star reviews. I can help with pricing, services, timelines, and more. What brings you here today?";
 
       setMessages([{
         id: '0',
@@ -368,12 +369,18 @@ export default function Chatbot() {
   const dismissPromo = () => {
     setShowPromo(false);
     setPromoDismissed(true);
+    try {
+      localStorage.setItem('grellax-james-dismissed', '1');
+    } catch {}
   };
 
   const openFromPromo = () => {
     setShowPromo(false);
     setPromoDismissed(true);
     setIsOpen(true);
+    try {
+      localStorage.setItem('grellax-james-dismissed', '1');
+    } catch {}
   };
 
   const lastBotMessageIndex = useMemo(() => {
@@ -391,6 +398,7 @@ export default function Chatbot() {
           {/* Close */}
           <button
             onClick={dismissPromo}
+            aria-label="Dismiss chat prompt"
             className="absolute top-3 right-3 text-zinc-600 hover:text-white transition-colors"
           >
             <X className="w-3.5 h-3.5" />
@@ -476,6 +484,7 @@ export default function Chatbot() {
             </div>
             <button
               onClick={() => setIsOpen(false)}
+              aria-label="Close chat"
               className="text-zinc-600 hover:text-white transition-colors"
             >
               <X className="w-4 h-4" />
@@ -641,6 +650,7 @@ export default function Chatbot() {
                 value={input}
                 onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
                 placeholder="Ask James anything..."
+                aria-label="Ask James anything"
                 maxLength={MAX_INPUT_LENGTH}
                 autoComplete="off"
                 className="flex-1 bg-transparent text-white text-sm font-light placeholder:text-zinc-700 focus:outline-none"
@@ -648,6 +658,7 @@ export default function Chatbot() {
               <button
                 type="submit"
                 disabled={!input.trim()}
+                aria-label="Send message"
                 className="w-8 h-8 flex shrink-0 items-center justify-center text-zinc-600 hover:text-white transition-colors disabled:opacity-20"
               >
                 <ArrowUpRight className="w-4 h-4" />
@@ -670,21 +681,28 @@ export default function Chatbot() {
         </button>
       )}
 
-      {/* ── Toggle button ── */}
+      {/* ── Toggle button — animated gradient on mobile, plain on desktop ── */}
+      <div className="lg:hidden">
+        <HoverBorderGradient
+          as="button"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? 'Close chat' : 'Open chat'}
+          containerClassName="rounded-full"
+          className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 p-0 text-zinc-400 hover:text-white transition-colors"
+        >
+          {isOpen ? <X className="w-4 h-4" /> : <Send className="w-4 h-4" />}
+        </HoverBorderGradient>
+      </div>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl transition-all duration-300 ${
+        className={`hidden lg:flex w-11 h-11 sm:w-12 sm:h-12 items-center justify-center rounded-xl transition-all duration-300 ${
           isOpen
             ? 'bg-transparent text-zinc-500 hover:text-white'
             : 'bg-[#0a0a0a] border border-white/[0.06] text-zinc-500 hover:text-white hover:border-white/10'
         }`}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
-        {isOpen ? (
-          <X className="w-4 h-4" />
-        ) : (
-          <Send className="w-4 h-4" />
-        )}
+        {isOpen ? <X className="w-4 h-4" /> : <Send className="w-4 h-4" />}
       </button>
     </div>
   );
