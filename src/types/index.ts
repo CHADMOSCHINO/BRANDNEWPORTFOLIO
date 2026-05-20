@@ -8,11 +8,15 @@ export interface Project {
   title: string;
   category: string;
   image: string;
+  video?: string;
   stats: string;
   impact: string;
   description: string;
   color: string;
   externalUrl: string;
+  beforeUrl?: string;
+  beforeLabel?: string;
+  afterLabel?: string;
   isShopify: boolean;
   metrics?: ProjectMetric[];
   scope?: string[];

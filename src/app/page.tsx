@@ -1,4 +1,3 @@
-import Preloader from '@/components/Preloader';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import SocialProofSection from '@/components/SocialProofSection';
@@ -13,20 +12,20 @@ import GoogleReviews from '@/components/GoogleReviews';
 import FAQContent from '@/components/FAQContent';
 import Footer from '@/components/Footer';
 import DeferredChatbot from '@/components/DeferredChatbot';
+import StickyBuyBar from '@/components/StickyBuyBar';
 
 export default function Home() {
   return (
     <div className="bg-[#020202] text-white font-sans antialiased">
-      <Preloader />
       <Navbar />
       <main>
         <Hero />
         <SocialProofSection />
-        <RetainerServices />
+        <PricingSection />
         <MarqueeBanner />
         <ProjectCards />
+        <RetainerServices />
         <ServicesSection />
-        <PricingSection />
         <TechBadges />
         <Testimonials />
         <GoogleReviews />
@@ -35,6 +34,7 @@ export default function Home() {
         </section>
       </main>
       <Footer />
+      <StickyBuyBar />
       <DeferredChatbot />
     </div>
   );

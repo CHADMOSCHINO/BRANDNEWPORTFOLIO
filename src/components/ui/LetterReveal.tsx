@@ -36,15 +36,17 @@ export default function LetterReveal({
 }: LetterRevealProps) {
   const ref = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
+  const [motionMode, setMotionMode] = useState<'full' | 'gentle' | 'reduced'>('full');
 
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
 
-    if (
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    setMotionMode(prefersReduced ? 'reduced' : coarsePointer ? 'gentle' : 'full');
+
+    if (prefersReduced) {
       setInView(true);
       return;
     }
@@ -68,6 +70,9 @@ export default function LetterReveal({
   }, [threshold, once]);
 
   const chars = Array.from(text);
+  const effectiveBlur = motionMode === 'full' ? blur : 0;
+  const effectiveStagger = motionMode === 'full' ? stagger : Math.min(stagger, 24);
+  const effectiveDuration = motionMode === 'full' ? duration : Math.min(duration, 650);
 
   return (
     <Tag
@@ -78,8 +83,8 @@ export default function LetterReveal({
         display: 'inline-block',
         fontFamily: 'var(--font-inter), system-ui, sans-serif',
       }}
-      aria-label={text}
     >
+      <span className="sr-only">{text}</span>
       {chars.map((char, i) => (
         <span
           key={`${char}-${i}`}
@@ -89,9 +94,11 @@ export default function LetterReveal({
             whiteSpace: char === ' ' ? 'pre' : 'normal',
             opacity: inView ? 1 : 0,
             transform: inView ? 'translateY(0)' : `translateY(${y}px)`,
-            filter: inView ? 'blur(0px)' : `blur(${blur}px)`,
-            transition: `opacity ${duration}ms cubic-bezier(0.16,1,0.3,1) ${delay + i * stagger}ms, transform ${duration}ms cubic-bezier(0.16,1,0.3,1) ${delay + i * stagger}ms, filter ${duration}ms cubic-bezier(0.16,1,0.3,1) ${delay + i * stagger}ms`,
-            willChange: 'transform, opacity, filter',
+            filter: inView ? 'blur(0px)' : `blur(${effectiveBlur}px)`,
+            transition: motionMode === 'reduced'
+              ? 'none'
+              : `opacity ${effectiveDuration}ms cubic-bezier(0.16,1,0.3,1) ${delay + i * effectiveStagger}ms, transform ${effectiveDuration}ms cubic-bezier(0.16,1,0.3,1) ${delay + i * effectiveStagger}ms, filter ${effectiveDuration}ms cubic-bezier(0.16,1,0.3,1) ${delay + i * effectiveStagger}ms`,
+            willChange: inView ? 'auto' : 'transform, opacity, filter',
           }}
         >
           {char}

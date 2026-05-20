@@ -65,13 +65,17 @@ export default function MarqueeBanner() {
           <button
             key={i}
             onClick={() => setActiveIndex(i)}
-            className={`h-[3px] rounded-full transition-all duration-500 ${
-              i === activeIndex
-                ? 'bg-white/60 w-5'
-                : 'bg-zinc-800 w-[3px] hover:bg-zinc-600'
-            }`}
+            className="group grid h-6 w-6 place-items-center rounded-full"
             aria-label={`Show badge ${i + 1}`}
-          />
+          >
+            <span
+              className={`h-[3px] rounded-full transition-all duration-500 ${
+                i === activeIndex
+                  ? 'bg-white/70 w-5'
+                  : 'bg-zinc-700 w-[3px] group-hover:bg-zinc-500'
+              }`}
+            />
+          </button>
         ))}
       </div>
     </section>

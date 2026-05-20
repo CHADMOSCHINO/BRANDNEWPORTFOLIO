@@ -17,7 +17,7 @@ const TIERS = [
     name: 'Starter',
     price: '$500',
     term: 'one-time',
-    tagline: 'Perfect for landing pages & MVPs',
+    tagline: 'Fast landing page for leads, bookings, or launch validation',
     popular: false,
     features: [
       'Hand-coded landing page',
@@ -29,8 +29,8 @@ const TIERS = [
       '14-day post-launch support',
       'Delivered in 2–3 business days',
     ],
-    cta: 'Get Started',
-    href: smsLink("Hey Chad! I'm interested in the Starter package."),
+    cta: 'Reserve Starter',
+    href: smsLink("Hey Chad! I want to reserve the $500 Starter Launch build."),
   },
   {
     num: '02',
@@ -50,7 +50,7 @@ const TIERS = [
       'Performance optimization (95+ Lighthouse)',
       'Delivered in 5–7 business days',
     ],
-    cta: 'Text Me',
+    cta: 'Scope Custom Build',
     href: smsLink("Hey Chad! I'm interested in a Custom Build."),
   },
   {
@@ -71,7 +71,7 @@ const TIERS = [
       'Ongoing maintenance available',
       'Custom timeline scoped to project',
     ],
-    cta: 'Text Me',
+    cta: 'Scope Enterprise',
     href: smsLink("Hey Chad! I'm interested in an Enterprise build."),
   },
 ];
@@ -173,16 +173,16 @@ export default function PricingSection() {
             as="span"
             className="text-[10px] text-zinc-500 tracking-[0.3em] uppercase font-light block mb-5"
           >
-            Pricing
+            Pick Your Build
           </TextScramble>
           <h2
             className="font-light tracking-tighter text-white leading-[0.95]"
             style={{ fontSize: 'clamp(2rem, 6vw, 5rem)' }}
           >
-            <LetterReveal text="Transparent pricing. " stagger={60} duration={900} />
+            <LetterReveal text="Start simple. " stagger={60} duration={900} />
             <LetterReveal
               as="span"
-              text="No surprises."
+              text="Scale when ready."
               className="text-zinc-500 italic"
               stagger={60}
               duration={900}
@@ -190,8 +190,8 @@ export default function PricingSection() {
             />
           </h2>
           <p className="mt-5 text-zinc-500 text-sm font-light max-w-lg mx-auto leading-relaxed">
-            50% deposit to start. 50% on completion. Every project includes revisions,
-            post-launch support, and a walkthrough video.
+            Starter builds begin at $500. Bigger sites, Shopify stores, and apps scale from there.
+            Every build includes revisions, post-launch support, and a walkthrough video.
           </p>
         </div>
 

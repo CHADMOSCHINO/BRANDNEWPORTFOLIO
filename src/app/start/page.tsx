@@ -19,9 +19,9 @@ const FEATURED = [
     timeline: '5 days',
   },
   {
-    ...PROJECTS.find((p) => p.id === 'repair-wizardz')!,
-    budget: '$2,500 – $7,500',
-    timeline: '7 days',
+    ...PROJECTS.find((p) => p.id === 'dominican-salon-raleigh')!,
+    budget: '$2,500 – $5,000',
+    timeline: '5 days',
   },
   {
     ...PROJECTS.find((p) => p.id === 'dreuxhamm')!,

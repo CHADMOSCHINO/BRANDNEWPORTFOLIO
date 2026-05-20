@@ -6,7 +6,7 @@ import ShopifyLanding from '@/components/ShopifyLanding';
 export const metadata: Metadata = {
   title: 'Custom Shopify Developer | Headless Stores with Zero Theme Limitations',
   description:
-    'Headless Shopify stores built with React and Hydrogen. No templates. No page builders. Full creative control, real-time inventory sync, and 90+ Lighthouse scores. See live builds from Dreux Hamm, Project Prevail, and more.',
+    'Headless Shopify stores built with React and Hydrogen. No templates. No page builders. Full creative control, real-time inventory sync, and 90+ Lighthouse scores. See premium builds from Dreux Hamm, Reloaded 3X, Artime NYC, and more.',
   openGraph: {
     title: 'Custom Shopify Developer | Headless Stores Built from Scratch',
     description:

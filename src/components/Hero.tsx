@@ -1,412 +1,342 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { PERSONAL } from '@/lib/constants';
+import { useEffect, useMemo, useRef } from 'react';
+import Image from 'next/image';
+import { ArrowDown, Check, MessageCircle } from 'lucide-react';
+import { PERSONAL, PROJECTS } from '@/lib/constants';
 import Magnetic from '@/components/ui/Magnetic';
 
-type Particle = {
-  id: number;
-  top: string;
-  left: string;
-  opacity: number;
-  duration: string;
-  delay: string;
-  size: number;
-};
+const CARD_FRAMES = [
+  { className: 'h-24 w-[4.5rem] sm:h-32 sm:w-24 md:h-44 md:w-32', width: 320, height: 448 },
+  { className: 'h-20 w-20 sm:h-32 sm:w-32 md:h-40 md:w-40', width: 384, height: 384 },
+  { className: 'h-20 w-28 sm:h-28 sm:w-40 md:h-36 md:w-52', width: 520, height: 360 },
+  { className: 'h-24 w-20 sm:h-36 sm:w-28 md:h-48 md:w-36', width: 360, height: 480 },
+] as const;
+
+const OFFER_POINTS = [
+  'Hand-coded landing page',
+  '2-3 day starter delivery',
+  'Mobile-first + SEO-ready',
+  '2 revisions + 14-day support',
+];
+
+const TRUST_POINTS = ['50+ projects', '25+ reviews', 'No templates'];
 
 export default function Hero() {
-  const [particles, setParticles] = useState<Particle[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const featuredProjects = useMemo(() => PROJECTS, []);
+  const railProjects = featuredProjects.slice(0, 5);
 
   useEffect(() => {
-    const mql = window.matchMedia('(max-width: 767px)');
-    const apply = () => setIsMobile(mql.matches);
-    apply();
-    mql.addEventListener('change', apply);
-    return () => mql.removeEventListener('change', apply);
-  }, []);
+    let animationFrame = 0;
+    let isVisible = true;
+    let time = -0.7;
+    let pointerX = 0;
+    let pointerY = 0;
+    let easedX = 0;
+    let easedY = 0;
+    let viewportWidth = window.innerWidth;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── Video autoplay — gentle recovery only, no pause/play war ── */
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const positionCards = () => {
+      const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+      const total = cards.length;
+      if (!total) return;
 
-    const attemptPlay = () => {
-      const p = video.play();
-      if (p && typeof p.catch === 'function') p.catch(() => {});
+      const isMobile = viewportWidth < 768;
+      const isTablet = viewportWidth >= 768 && viewportWidth < 1180;
+      const radiusX = isMobile ? 132 : isTablet ? 300 : 430;
+      const radiusZ = isMobile ? 70 : isTablet ? 230 : 330;
+      const wave = isMobile ? 26 : isTablet ? 76 : 98;
+
+      cards.forEach((card, index) => {
+        const angle = time + (index / total) * Math.PI * 2;
+        const z = Math.sin(angle) * radiusZ;
+        const depth = (z + radiusZ) / (radiusZ * 2);
+        const x = Math.cos(angle) * radiusX;
+        const y = Math.sin(angle * 1.75 + index * 0.45) * wave;
+        const parallaxX = easedX * (isMobile ? 16 : 76) * depth;
+        const parallaxY = easedY * (isMobile ? 14 : 58) * depth;
+        const scale = 0.54 + depth * (isMobile ? 0.28 : 0.56);
+        const rotate = Math.cos(angle) * (isMobile ? 5 : 9);
+
+        card.style.opacity = `${isMobile ? 0.12 + depth * 0.58 : 0.2 + depth * 0.8}`;
+        card.style.zIndex = `${Math.round(10 + depth * 40)}`;
+        card.style.transform = [
+          'translate(-50%, -50%)',
+          `translate3d(${x + parallaxX}px, ${y + parallaxY}px, ${z}px)`,
+          `scale(${scale})`,
+          `rotate(${rotate}deg)`,
+        ].join(' ');
+      });
     };
 
-    attemptPlay();
+    const animate = () => {
+      if (!isVisible || document.hidden) {
+        animationFrame = 0;
+        return;
+      }
 
-    // Only retry on real buffering hiccups — NOT on 'pause' or 'suspend',
-    // which would fight the browser in Low Power Mode and flash the play button.
-    const onRecover = () => attemptPlay();
-    video.addEventListener('stalled', onRecover);
-    video.addEventListener('waiting', onRecover);
-
-    // Latch first user interaction as a guaranteed play trigger (mobile autoplay gate)
-    const tryPlayOnce = () => {
-      attemptPlay();
-      document.removeEventListener('touchstart', tryPlayOnce);
-      document.removeEventListener('scroll', tryPlayOnce);
-      document.removeEventListener('click', tryPlayOnce);
+      time += viewportWidth < 768 ? 0.0035 : 0.0045;
+      easedX += (pointerX - easedX) * 0.055;
+      easedY += (pointerY - easedY) * 0.055;
+      positionCards();
+      animationFrame = window.requestAnimationFrame(animate);
     };
-    document.addEventListener('touchstart', tryPlayOnce, { once: true, passive: true });
-    document.addEventListener('scroll', tryPlayOnce, { once: true, passive: true });
-    document.addEventListener('click', tryPlayOnce, { once: true, passive: true });
+
+    const startAnimation = () => {
+      if (reduceMotion || animationFrame || !isVisible || document.hidden) return;
+      animationFrame = window.requestAnimationFrame(animate);
+    };
+
+    const stopAnimation = () => {
+      if (!animationFrame) return;
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      if (event.pointerType === 'touch') return;
+      pointerX = (event.clientX / window.innerWidth - 0.5) * 2;
+      pointerY = (event.clientY / window.innerHeight - 0.5) * 2;
+    };
+
+    const handleResize = () => {
+      viewportWidth = window.innerWidth;
+      positionCards();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopAnimation();
+      } else {
+        startAnimation();
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) {
+          positionCards();
+          startAnimation();
+        } else {
+          stopAnimation();
+        }
+      },
+      { rootMargin: '20% 0px 20% 0px' }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    window.addEventListener('resize', handleResize);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    if (reduceMotion) {
+      positionCards();
+    } else {
+      window.addEventListener('pointermove', handlePointerMove, { passive: true });
+      startAnimation();
+    }
 
     return () => {
-      video.removeEventListener('stalled', onRecover);
-      video.removeEventListener('waiting', onRecover);
-      document.removeEventListener('touchstart', tryPlayOnce);
-      document.removeEventListener('scroll', tryPlayOnce);
-      document.removeEventListener('click', tryPlayOnce);
+      observer.disconnect();
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
     };
-  }, []);
+  }, [featuredProjects.length]);
 
-  useEffect(() => {
-    const count = window.matchMedia('(max-width: 767px)').matches ? 6 : 12;
-    setParticles(
-      Array.from({ length: count }, (_, i) => ({
-        id: i,
-        top: `${10 + Math.random() * 80}%`,
-        left: `${5 + Math.random() * 90}%`,
-        opacity: 0.03 + Math.random() * 0.03,
-        duration: `${14 + Math.random() * 10}s`,
-        delay: `${Math.random() * 8}s`,
-        size: 2 + Math.random() * 2,
-      }))
-    );
-  }, []);
+  const scrollToWork = () => {
+    document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <section className="relative h-[150svh] md:h-[150vh] z-[1]">
-      <div className="sticky top-0 h-[100svh] md:h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-[#020202]">
-        {/* ── Background video ── */}
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          poster="/hero-bg-poster.jpg"
-          disablePictureInPicture
-          disableRemotePlayback
-          controls={false}
-          width={1280}
-          height={720}
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.18] pointer-events-none select-none"
-          style={{ WebkitUserSelect: 'none', userSelect: 'none' }}
-          aria-hidden="true"
-          tabIndex={-1}
-        >
-          <source src="/hero-bg.mp4" type="video/mp4" />
-        </video>
-
-        {/* ── WebGL-style ambient mesh background ── */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          {/* Primary orbs — larger, subtle movement. Blur radius and will-change scaled down on mobile to ease GPU cost. */}
+    <section ref={sectionRef} className="relative z-[1] h-[132svh] md:h-[138vh] bg-[#020202]">
+      <div className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#020202] sm:min-h-[660px]">
+        <div className="absolute inset-0 pointer-events-none">
           <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] rounded-full opacity-20 mix-blend-screen"
-            style={{
-              background: 'radial-gradient(ellipse at center, rgba(80,80,120,0.3) 0%, transparent 70%)',
-              filter: `blur(${isMobile ? 30 : 80}px)`,
-              animation: 'floatWebGL 20s ease-in-out infinite alternate',
-              willChange: isMobile ? 'auto' : 'transform',
-            }}
-          />
-          <div
-            className="absolute top-[30%] left-[20%] w-[50vw] h-[50vw] rounded-full opacity-15 mix-blend-screen"
-            style={{
-              background: 'radial-gradient(ellipse at center, rgba(60,60,100,0.25) 0%, transparent 70%)',
-              filter: `blur(${isMobile ? 35 : 100}px)`,
-              animation: 'floatWebGL 25s ease-in-out infinite alternate-reverse',
-              willChange: isMobile ? 'auto' : 'transform',
-            }}
-          />
-          <div
-            className="absolute bottom-[20%] right-[15%] w-[40vw] h-[40vw] rounded-full opacity-10 mix-blend-screen"
-            style={{
-              background: 'radial-gradient(ellipse at center, rgba(100,70,120,0.2) 0%, transparent 70%)',
-              filter: `blur(${isMobile ? 30 : 90}px)`,
-              animation: 'floatOrb 30s ease-in-out infinite',
-              willChange: isMobile ? 'auto' : 'transform',
-            }}
-          />
-
-          {/* Secondary smaller orbs — more movement */}
-          <div
-            className="absolute top-[60%] left-[60%] w-[25vw] h-[25vw] rounded-full opacity-[0.08] mix-blend-screen"
-            style={{
-              background: 'radial-gradient(circle, rgba(80,100,140,0.3) 0%, transparent 60%)',
-              filter: `blur(${isMobile ? 20 : 60}px)`,
-              animation: 'floatOrb 18s ease-in-out infinite reverse',
-              willChange: isMobile ? 'auto' : 'transform',
-            }}
-          />
-          <div
-            className="absolute top-[20%] right-[30%] w-[20vw] h-[20vw] rounded-full opacity-[0.06] mix-blend-screen"
-            style={{
-              background: 'radial-gradient(circle, rgba(120,80,100,0.2) 0%, transparent 60%)',
-              filter: `blur(${isMobile ? 18 : 50}px)`,
-              animation: 'floatOrb 22s ease-in-out infinite',
-              willChange: isMobile ? 'auto' : 'transform',
-            }}
-          />
-
-          {/* ── Floating particles — tiny ambient dots ── */}
-          {particles.map((p) => (
-            <div
-              key={p.id}
-              className="absolute rounded-full bg-white"
-              style={{
-                top: p.top,
-                left: p.left,
-                width: p.size,
-                height: p.size,
-                opacity: p.opacity,
-                animation: `floatParticle ${p.duration} ease-in-out ${p.delay} infinite`,
-              }}
-            />
-          ))}
-
-          {/* ── Concentric pulsing rings ── */}
-          {[280, 440, 600].map((size, i) => (
-            <div
-              key={`ring-${i}`}
-              className="absolute top-1/2 left-1/2 rounded-full border border-white/[0.03]"
-              style={{
-                width: `${size}px`,
-                height: `${size}px`,
-                animation: `concentricPulse ${6 + i * 2}s ease-in-out ${i * 1.5}s infinite`,
-              }}
-            />
-          ))}
-
-          {/* Subtle grid overlay */}
-          <div
-            className="absolute inset-0 opacity-[0.02]"
+            className="absolute inset-0 opacity-[0.13]"
             style={{
               backgroundImage:
-                'linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)',
-              backgroundSize: '60px 60px',
-              animation: 'gridPulse 8s ease-in-out infinite',
+                'linear-gradient(rgba(255,255,255,0.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.09) 1px, transparent 1px)',
+              backgroundSize: '84px 84px',
             }}
           />
+          <div
+            className="absolute inset-0 opacity-[0.22]"
+            style={{
+              backgroundImage:
+                'linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.08) 45%, transparent 58%)',
+            }}
+          />
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#020202] to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-[52%] bg-gradient-to-t from-[#020202] via-[#020202]/88 to-transparent" />
         </div>
 
-        {/* ── Hero content ── */}
-        <div className="z-10 text-center flex flex-col items-center justify-center w-full px-5 sm:px-8 pt-20 md:pt-28 lg:pt-32">
-          {/* Status pill — mobile only */}
-          <div className="overflow-hidden mb-6 sm:mb-8 md:hidden">
-            <div
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] backdrop-blur-md"
-              style={{ animation: 'revealText 1s var(--ease-out-expo) 2.5s both' }}
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600" />
-              </span>
-              <span className="text-[10px] sm:text-[11px] font-medium text-zinc-400 uppercase tracking-[0.2em]">
-                Accepting New Clients
-              </span>
-            </div>
-          </div>
-
-          {/* Main heading — clamped for ultra-wide */}
-          <div className="overflow-hidden w-full flex justify-center">
-            <h1
-              className="leading-[0.8] tracking-tighter font-light text-white"
-              style={{
-                fontSize: 'clamp(3rem, 13vw, 12rem)',
-                animation: 'revealText 1.5s 2.5s var(--ease-out-expo) both',
-              }}
-            >
-              CREATIVE
-            </h1>
-          </div>
-          <div className="overflow-hidden flex items-center justify-center gap-3 sm:gap-6 md:gap-8 w-full mt-1 sm:mt-2 md:mt-4">
-            <div
-              className="h-[1px] w-6 sm:w-12 md:w-24 bg-white/20 hidden sm:block origin-left"
-              style={{ animation: 'lineGrow 1.5s 3s var(--ease-out-expo) both' }}
-            />
-            <h1
-              className="leading-[0.8] tracking-tighter font-light text-zinc-300"
-              style={{
-                fontSize: 'clamp(3rem, 13vw, 12rem)',
-                animation: 'revealText 1.5s 2.7s var(--ease-out-expo) both',
-              }}
-            >
-              DEVELOPER
-            </h1>
-            <div
-              className="h-[1px] w-6 sm:w-12 md:w-24 bg-white/20 hidden sm:block origin-right"
-              style={{ animation: 'lineGrow 1.5s 3s var(--ease-out-expo) both' }}
-            />
-          </div>
-
-          {/* Subhead */}
-          <div className="overflow-hidden mt-8 sm:mt-12 md:mt-16">
-            <p
-              className="text-zinc-500 font-light tracking-wide text-[11px] sm:text-xs md:text-sm uppercase max-w-lg mx-auto leading-relaxed px-2 text-center"
-              style={{ animation: 'revealText 1s 3.2s var(--ease-out-expo) both' }}
-            >
-              The websites your competitors don&apos;t want you to have. Designed, built, and shipped in days.
-            </p>
-          </div>
-
-          {/* Trust badges */}
-          <div
-            className="flex items-center justify-center gap-5 sm:gap-8 md:gap-10 mt-8 sm:mt-10 opacity-0"
-            style={{ animation: 'revealText 1s 3.3s var(--ease-out-expo) forwards' }}
-          >
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-white text-sm font-light">50+</span>
-              <span className="text-[8px] sm:text-[9px] text-zinc-400 tracking-[0.2em] uppercase">
-                Brands Scaled
-              </span>
-            </div>
-            <div className="w-[1px] h-7 sm:h-8 bg-zinc-800" />
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-white text-sm font-light">5 to 7</span>
-              <span className="text-[8px] sm:text-[9px] text-zinc-400 tracking-[0.2em] uppercase">
-                Day Delivery
-              </span>
-            </div>
-            <div className="w-[1px] h-7 sm:h-8 bg-zinc-800" />
-            <div className="flex flex-col items-center gap-1.5">
-              <svg viewBox="0 0 109.5 124.5" className="w-4 h-4 sm:w-5 sm:h-5" aria-label="Shopify Partner">
-                <path d="M95.6 28.2c-.1-.6-.6-1-1.1-1-.5 0-10.3-.8-10.3-.8s-6.8-6.8-7.5-7.5c-.7-.7-2.1-.5-2.6-.3 0 0-1.4.4-3.7 1.1-.4-1.3-1-2.8-1.8-4.4-2.6-5-6.5-7.7-11.1-7.7 0 0 0 0 0 0-.3 0-.7 0-1 .1-.2-.2-.3-.3-.5-.5-2-2.2-4.6-3.2-7.7-3.1-6 .2-12 4.5-16.8 12.2-3.4 5.4-6 12.2-6.7 17.5-6.9 2.1-11.6 3.6-11.7 3.6C11.4 38.5 11 39 11 39.8c-.3 3.5-9 69.3-9 69.3l70.4 13.2 38.1-8.2S95.7 28.8 95.6 28.2zM67.3 21.6c-1.7.5-3.6 1.1-5.7 1.8 0-3-.4-7.3-1.8-10.9C64 13.7 66.4 18.6 67.3 21.6zM57.3 24.8c-3.8 1.2-8 2.5-12.2 3.8 1.2-4.5 3.4-9 6.1-12 1-1.1 2.4-2.3 4.1-3 1.7 3.5 2.1 8.4 2 11.2zM49.3 7.7c1.3 0 2.4.3 3.4.8-1.5.8-3 2-4.4 3.5-3.6 3.9-6.4 10-7.5 15.9-3.5 1.1-6.9 2.1-10.1 3.1C32.9 22.5 40.3 8 49.3 7.7z" fill="#95BF47"/>
-                <path d="M94.5 27.2c-.5 0-10.3-.8-10.3-.8s-6.8-6.8-7.5-7.5c-.3-.3-.6-.4-1-.4l-5.3 108.7 38.1-8.2S95.7 28.8 95.6 28.2c-.1-.6-.6-1-1.1-1" fill="#5E8E3E"/>
-                <path d="M57.4 43.8l-4.9 14.5s-4.3-2.3-9.5-2.3c-7.7 0-8.1 4.8-8.1 6 0 6.6 17.3 9.2 17.3 24.7 0 12.2-7.7 20.1-18.2 20.1-12.5 0-18.9-7.8-18.9-7.8l3.3-11s6.6 5.7 12.1 5.7c3.6 0 5.1-2.8 5.1-4.9 0-8.6-14.2-9-14.2-23.3 0-12 8.6-23.6 26-23.6 6.7-.1 10 1.9 10 1.9" fill="#fff"/>
-              </svg>
-              <span className="text-[8px] sm:text-[9px] text-zinc-400 tracking-[0.2em] uppercase">
-                Partner
-              </span>
-            </div>
-            <div className="w-[1px] h-7 sm:h-8 bg-zinc-800" />
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-emerald-400 text-sm font-light">Open</span>
-              <span className="text-[8px] sm:text-[9px] text-zinc-400 tracking-[0.2em] uppercase">
-                To Contract
-              </span>
-            </div>
-          </div>
-
-          {/* CTA buttons */}
-          <div
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 opacity-0"
-            style={{ animation: 'revealText 1s 3.5s var(--ease-out-expo) forwards' }}
-          >
-            <Magnetic strength={6} radius={100}>
-              <a
-                href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I'm interested in working together.")}`}
-                className="group flex items-center gap-4 cursor-pointer"
-              >
-                <span className="text-white text-xs font-light tracking-widest uppercase">
-                  Text Me
-                </span>
-                <div className="w-16 h-[1px] bg-zinc-800 group-hover:bg-white transition-colors duration-300 ease-out relative overflow-hidden">
-                  <div className="absolute inset-0 origin-left scale-x-50 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100" />
-                </div>
-              </a>
-            </Magnetic>
-
-            <span className="text-zinc-800 hidden sm:block">/</span>
-
-            <Magnetic strength={6} radius={100}>
-              <a
-                href={PERSONAL.calendly}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-4 cursor-pointer"
-              >
-                <span className="text-zinc-500 text-xs font-light tracking-widest uppercase hover:text-white transition-colors duration-300">
-                  Book A Call
-                </span>
-              </a>
-            </Magnetic>
-
-            <span className="text-zinc-800 hidden sm:block">/</span>
-
-            <Magnetic strength={6} radius={100}>
-              <button
-                onClick={() =>
-                  document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' })
-                }
-                className="group flex items-center gap-4 cursor-pointer"
-              >
-                <span className="text-zinc-500 text-xs font-light tracking-widest uppercase hover:text-white transition-colors duration-300">
-                  View Work
-                </span>
-              </button>
-            </Magnetic>
-          </div>
-
-          {/* Phone number for ad traffic / mobile */}
-          <div
-            className="mt-6 opacity-0"
-            style={{ animation: 'revealText 1s 3.7s var(--ease-out-expo) forwards' }}
-          >
-            <a
-              href={`tel:${PERSONAL.phone}`}
-              className="text-[11px] text-zinc-600 font-light tracking-widest hover:text-white transition-colors duration-300"
-            >
-              (919) 526-0824
-            </a>
-          </div>
-
-          {/* Immersion slider */}
-          <div
-            className="flex items-center gap-4 mt-12 sm:mt-16 w-44 sm:w-56 md:w-64 opacity-0"
-            style={{ animation: 'revealText 1s 3.8s var(--ease-out-expo) forwards' }}
-          >
-            <span className="text-[10px] text-zinc-600 font-light uppercase tracking-widest">
-              Immersion
-            </span>
-            <div className="h-[1px] bg-zinc-800 flex-1 relative">
-              <div className="absolute left-0 top-0 bottom-0 w-[85%] bg-zinc-400" />
-              <div className="absolute left-[85%] top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
-            </div>
-          </div>
-        </div>
-
-        {/* ── Spinning status badge — desktop only ── */}
         <div
-          className="absolute bottom-8 left-8 z-20 hidden md:block opacity-0"
-          style={{ animation: 'revealText 1s 4.2s var(--ease-out-expo) forwards' }}
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
+          aria-hidden="true"
         >
-          <a
-            href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I'm interested in working together.")}`}
-            className="group relative block w-[100px] h-[100px] lg:w-[120px] lg:h-[120px] cursor-pointer"
-          >
-            {/* Spinning text ring */}
-            <svg
-              className="w-full h-full animate-[spin_20s_linear_infinite]"
-              viewBox="0 0 120 120"
-            >
-              <defs>
-                <path
-                  id="circlePath"
-                  d="M 60,60 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0"
+          {featuredProjects.map((project, index) => {
+            const frame = CARD_FRAMES[index % CARD_FRAMES.length];
+            return (
+              <div
+                key={project.id}
+                ref={(node) => {
+                  cardRefs.current[index] = node;
+                }}
+                className={`absolute left-1/2 top-[24%] block overflow-hidden rounded-[1.2rem] border border-white/[0.1] bg-white/[0.04] shadow-[0_20px_60px_rgba(0,0,0,0.55)] brightness-[0.68] saturate-[0.85] md:top-[38%] md:rounded-[1.75rem] md:brightness-75 md:saturate-[0.9] ${frame.className}`}
+                style={{
+                  opacity: 0,
+                  transform: 'translate(-50%, -50%) scale(0.6)',
+                  willChange: 'transform, opacity',
+                }}
+              >
+                <Image
+                  src={project.image}
+                  alt=""
+                  width={frame.width}
+                  height={frame.height}
+                  priority={index < 3}
+                  quality={75}
+                  sizes="(max-width: 767px) 132px, (max-width: 1179px) 180px, 220px"
+                  className="h-full w-full object-cover"
+                  draggable={false}
                 />
-              </defs>
-              <text className="fill-zinc-500 group-hover:fill-white transition-colors duration-500" style={{ fontSize: '9.8px', letterSpacing: '4.5px', fontWeight: 300 }}>
-                <textPath href="#circlePath">
-                  ACCEPTING CLIENTS &#x2022; OPEN NOW &#x2022;&#160;
-                </textPath>
-              </text>
-            </svg>
+                <span className="absolute inset-x-0 bottom-0 hidden bg-gradient-to-t from-black/85 to-transparent px-3 pb-3 pt-8 text-[10px] font-light uppercase leading-none tracking-[0.16em] text-white/80 md:block">
+                  {project.title}
+                </span>
+              </div>
+            );
+          })}
+        </div>
 
-            {/* Center pulse dot */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="relative">
-                <span className="absolute inline-flex h-3 w-3 rounded-full bg-emerald-500/40 animate-ping" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(52,211,153,0.5)] group-hover:shadow-[0_0_20px_rgba(52,211,153,0.7)] transition-shadow duration-500" />
+        <aside className="absolute right-5 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-2 xl:flex">
+          {railProjects.map((project, index) => (
+            <a
+              key={project.id}
+              href={project.externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`rounded-full border px-4 py-2 text-[10px] font-light uppercase tracking-[0.16em] backdrop-blur-xl transition-colors duration-300 ${
+                index === 1
+                  ? 'border-white/25 bg-white/[0.09] text-white'
+                  : 'border-white/[0.1] bg-black/35 text-zinc-500 hover:border-white/25 hover:text-white'
+              }`}
+            >
+              {project.title}
+            </a>
+          ))}
+        </aside>
+
+        <div className="absolute inset-x-0 bottom-0 z-40 px-5 pb-12 sm:px-8 sm:pb-8 md:pb-10 [@media(max-height:700px)]:pb-7">
+          <div className="mx-auto flex max-w-7xl flex-col gap-7 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-4xl">
+              <div className="mb-4 overflow-hidden [@media(max-height:700px)]:hidden">
+                <p
+                  className="text-[10px] font-light uppercase tracking-[0.24em] text-zinc-500"
+                  style={{ animation: 'revealText 0.8s var(--ease-out-expo) 0.08s both' }}
+                >
+                  Launch Sprint + Portfolio Builds
+                </p>
+              </div>
+
+              <div className="overflow-hidden pb-1">
+                <h1
+                  className="text-[40px] font-light leading-[0.95] tracking-normal text-white sm:text-6xl md:text-7xl xl:text-8xl [@media(max-height:700px)]:text-[34px]"
+                  style={{ animation: 'revealText 1s var(--ease-out-expo) 0.16s both' }}
+                >
+                  Launch a site that sells.
+                </h1>
+              </div>
+              <div className="overflow-hidden pb-2">
+                <p
+                  className="text-[40px] font-light leading-[0.95] tracking-normal text-zinc-500 sm:text-6xl md:text-7xl xl:text-8xl [@media(max-height:700px)]:text-[34px]"
+                  style={{ animation: 'revealText 1s var(--ease-out-expo) 0.28s both' }}
+                >
+                  Built in days.
+                </p>
+              </div>
+
+              <p
+                className="mt-5 max-w-xl text-sm font-light leading-relaxed text-zinc-500 sm:text-base [@media(max-height:700px)]:hidden"
+                style={{ animation: 'fadeInUp 0.8s ease-out 0.42s both' }}
+              >
+                Premium hand-coded websites for brands that need leads, bookings, or sales fast.
+                Starter builds from $500.
+              </p>
+
+              <div
+                className="mt-5 hidden max-w-2xl flex-wrap items-center gap-2 sm:flex [@media(max-height:760px)]:hidden"
+                style={{ animation: 'fadeInUp 0.8s ease-out 0.48s both' }}
+              >
+                {TRUST_POINTS.map((point) => (
+                  <span
+                    key={point}
+                    className="rounded-full border border-white/[0.08] bg-white/[0.035] px-3 py-1.5 text-[10px] font-light uppercase tracking-[0.16em] text-zinc-400"
+                  >
+                    {point}
+                  </span>
+                ))}
               </div>
             </div>
-          </a>
+
+            <div
+              className="flex flex-col gap-4 md:min-w-[24rem] md:items-end"
+              style={{ animation: 'fadeInUp 0.8s ease-out 0.55s both' }}
+            >
+              <div className="hidden w-full rounded-2xl border border-white/[0.08] bg-white/[0.045] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_20px_70px_rgba(0,0,0,0.4)] backdrop-blur-2xl sm:block sm:p-5 [@media(max-height:760px)]:hidden">
+                <div className="flex items-start justify-between gap-5">
+                  <div>
+                    <p className="text-[10px] font-light uppercase tracking-[0.22em] text-emerald-400">
+                      Buy the outcome
+                    </p>
+                    <p className="mt-2 text-lg font-light tracking-tight text-white">
+                      $500 Starter Launch
+                    </p>
+                  </div>
+                  <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[9px] font-light uppercase tracking-[0.16em] text-emerald-300">
+                    2-3 days
+                  </span>
+                </div>
+
+                <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {OFFER_POINTS.map((point) => (
+                    <div key={point} className="flex min-w-0 items-center gap-2 text-[11px] font-light text-zinc-400">
+                      <Check className="h-3.5 w-3.5 shrink-0 text-emerald-400/80" aria-hidden="true" />
+                      <span className="truncate">{point}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid w-full grid-cols-2 gap-3 sm:flex sm:w-auto sm:flex-wrap sm:items-center">
+                <Magnetic strength={5} radius={100}>
+                  <a
+                    href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I want to reserve the $500 Starter Launch build.")}`}
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/[0.18] bg-white px-3 text-[10px] font-medium uppercase tracking-[0.12em] text-[#020202] shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_18px_52px_rgba(255,255,255,0.1)] backdrop-blur-xl transition-all duration-300 hover:bg-zinc-200 sm:w-auto sm:gap-3 sm:px-5 sm:text-[11px] sm:tracking-[0.16em]"
+                  >
+                    <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                    <span className="sm:hidden">Reserve</span>
+                    <span className="hidden sm:inline">Reserve My Build</span>
+                  </a>
+                </Magnetic>
+                <Magnetic strength={5} radius={100}>
+                  <button
+                    onClick={scrollToWork}
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/[0.1] bg-black/30 px-3 text-[10px] font-light uppercase tracking-[0.12em] text-zinc-400 backdrop-blur-xl transition-all duration-300 hover:border-white/25 hover:text-white sm:w-auto sm:gap-3 sm:px-5 sm:text-[11px] sm:tracking-[0.16em]"
+                  >
+                    View Work
+                    <ArrowDown className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </Magnetic>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -21,6 +21,7 @@ body {
   color: var(--foreground);
   font-weight: 300;
   overflow-x: clip;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -65,6 +66,10 @@ body.menu-open::after {
   outline-offset: 4px;
 }
 
+.text-zinc-500 {
+  color: #85858f;
+}
+
 /* Kill ALL native video UI — no play/pause button on slow connections,
    no picture-in-picture, no AirPlay, no context menu */
 video::-webkit-media-controls,
@@ -83,6 +88,12 @@ video::-webkit-media-controls-fullscreen-button {
   -webkit-appearance: none !important;
   opacity: 0 !important;
   pointer-events: none !important;
+}
+
+img,
+video {
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 ::-webkit-scrollbar {
@@ -218,6 +229,13 @@ video::-webkit-media-controls-fullscreen-button {
   animation: techMarquee 30s linear infinite;
 }
 
+@media (pointer: coarse) {
+  body::after {
+    animation-duration: 1.6s;
+    opacity: 0.025;
+  }
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -227,5 +245,9 @@ video::-webkit-media-controls-fullscreen-button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  body::after {
+    animation: none !important;
   }
 }

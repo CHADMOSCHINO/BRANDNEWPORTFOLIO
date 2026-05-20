@@ -59,7 +59,6 @@ export default function Footer() {
         {/* Big email link — enhanced flicker with slide-up */}
         <a
           href={`mailto:${PERSONAL.email}`}
-          aria-label={`Email ${PERSONAL.email}`}
           className="group relative inline-block overflow-hidden w-full"
         >
           <h2

@@ -11,6 +11,15 @@ const MAX_INPUT_LENGTH = 500;
 const MAX_MESSAGES_PER_SESSION = 40;
 const MIN_MESSAGE_INTERVAL_MS = 800;
 const LEAD_CAPTURE_AFTER = 3;
+const MOBILE_QUERY = '(max-width: 767px)';
+
+const JAMES_BOT = {
+  name: 'James',
+  role: 'Grellax Concierge',
+  status: 'Online 24/7',
+  avatar: '/james-headshot.jpg',
+  responseTime: 'Replies in <60s',
+};
 
 const FALLBACK_RESPONSES = [
   "I don't have the answer to that one off the top of my head. But I can help with pricing, services, timelines, or Shopify builds. What sounds good?",
@@ -178,8 +187,8 @@ export default function Chatbot() {
       id: '0',
       role: 'bot',
       content:
-        "Hey! I'm James, the 24/7 concierge for Grellax. I can answer questions about pricing, services, timelines, and more — 50+ shipped projects, including 8- and 9-figure clients. What can I help you with?",
-      suggestions: ['What do you build?', 'Show me pricing', 'How fast do you deliver?'],
+        `Hey! I'm ${JAMES_BOT.name}, the ${JAMES_BOT.role.toLowerCase()}. Starter builds begin at $500 and launch in 2-3 days. I can answer pricing, services, timelines, and portfolio questions. What can I help you with?`,
+      suggestions: ['Reserve starter', 'Show me pricing', 'How fast do you deliver?'],
     },
   ]);
   const [input, setInput] = useState('');
@@ -215,20 +224,22 @@ export default function Chatbot() {
       const adGreeting = utmCampaign?.toLowerCase().includes('shopify')
         ? "Hey! Looks like you're interested in a custom Shopify store. We build headless stores for 8- and 9-figure brands. I can walk you through pricing, our process, and show you live builds. What would you like to know?"
         : utmCampaign?.toLowerCase().includes('landing')
-        ? "Hey! Looking for a custom site? Our Starter package gets you a hand-coded landing page in 5 days. I can break down everything that's included."
-        : "Hey! Welcome to Grellax. I'm James — 50+ shipped projects, 25+ five-star reviews. I can help with pricing, services, timelines, and more. What brings you here today?";
+        ? "Hey! Looking for a custom site? Our Starter Launch gets you a hand-coded landing page in 2-3 days. I can break down everything that's included."
+        : "Hey! Welcome to Grellax. I'm James — starter builds from $500, 50+ shipped projects, 25+ five-star reviews. I can help with pricing, services, timelines, and more. What brings you here today?";
 
       setMessages([{
         id: '0',
         role: 'bot',
         content: adGreeting,
-        suggestions: ['What do you build?', 'Show me pricing', 'How fast do you deliver?'],
+        suggestions: ['Reserve starter', 'Show me pricing', 'How fast do you deliver?'],
       }]);
     }
   }, []);
 
   /* ── Proactive scroll-depth trigger — open chat at 55% scroll ── */
   useEffect(() => {
+    if (window.matchMedia(MOBILE_QUERY).matches) return;
+
     let fired = false;
     const onScroll = () => {
       if (fired || isOpen || promoDismissed) return;
@@ -246,6 +257,8 @@ export default function Chatbot() {
 
   /* ── Exit-intent trigger on desktop ── */
   useEffect(() => {
+    if (window.matchMedia(MOBILE_QUERY).matches) return;
+
     let fired = false;
     const onMouseLeave = (e: MouseEvent) => {
       if (fired || isOpen || promoDismissed || showPromo) return;
@@ -394,22 +407,24 @@ export default function Chatbot() {
     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[50]" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)', paddingRight: 'env(safe-area-inset-right, 0px)' }}>
       {/* ── Promo pop-out ── */}
       {showPromo && !isOpen && (
-        <div className="absolute bottom-16 right-0 w-[min(calc(100vw-2rem),18rem)] bg-[#0a0a0a] border border-white/[0.08] rounded-xl shadow-[0_0_60px_rgba(0,0,0,0.9)] p-5 animate-fade-in-up">
+        <div className="absolute bottom-16 right-0 w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-2xl border border-white/[0.12] bg-[#080808]/75 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_24px_90px_rgba(0,0,0,0.72)] backdrop-blur-2xl animate-fade-in-up">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_0%,rgba(255,255,255,0.11),transparent_58%)]" />
+          <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
           {/* Close */}
           <button
             onClick={dismissPromo}
             aria-label="Dismiss chat prompt"
-            className="absolute top-3 right-3 text-zinc-600 hover:text-white transition-colors"
+            className="absolute top-3 right-3 z-10 text-zinc-600 hover:text-white transition-colors"
           >
             <X className="w-3.5 h-3.5" />
           </button>
 
           {/* Content */}
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 shrink-0">
+          <div className="relative z-10 flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-white/15 shadow-[0_0_22px_rgba(52,211,153,0.12)] shrink-0">
               <Image
-                src="/james-headshot.jpg"
-                alt="James"
+                src={JAMES_BOT.avatar}
+                alt={JAMES_BOT.name}
                 width={160}
                 height={160}
                 quality={100}
@@ -418,7 +433,7 @@ export default function Chatbot() {
               />
             </div>
             <div>
-              <span className="text-xs text-white font-light tracking-tight block">James</span>
+              <span className="text-xs text-white font-light tracking-tight block">{JAMES_BOT.name}</span>
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="text-[9px] text-emerald-400/80 tracking-widest uppercase font-light">
@@ -428,24 +443,24 @@ export default function Chatbot() {
             </div>
           </div>
 
-          <p className="text-white text-sm font-light tracking-tight leading-relaxed mb-1">
-            Have a project in mind?
+          <p className="relative z-10 text-white text-sm font-light tracking-tight leading-relaxed mb-1">
+            Ready to reserve a build?
           </p>
-          <p className="text-zinc-500 text-xs font-light leading-relaxed mb-4">
-            Get a custom quote in under 60 seconds. 25+ five-star reviews.
+          <p className="relative z-10 text-zinc-500 text-xs font-light leading-relaxed mb-4">
+            Starter launches begin at $500. Get a direct reply in under 60 seconds.
           </p>
 
-          <div className="flex gap-2">
+          <div className="relative z-10 flex gap-2">
             <a
-              href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I saw your site and I'm interested.")}`}
-              className="flex-1 flex items-center justify-center gap-2 border border-white/10 rounded-lg py-2.5 text-[10px] text-white uppercase tracking-widest font-light hover:bg-white/5 transition-colors"
+              href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I want to reserve the $500 Starter Launch build.")}`}
+              className="flex-1 flex items-center justify-center gap-2 border border-white/10 bg-white/[0.03] rounded-lg py-2.5 text-[10px] text-white uppercase tracking-widest font-light hover:bg-white/[0.07] transition-colors"
             >
               <MessageCircle className="w-3 h-3 opacity-60" />
-              <span>Text Me</span>
+              <span>Reserve</span>
             </a>
             <button
               onClick={openFromPromo}
-              className="flex-1 flex items-center justify-center gap-2 bg-white/[0.08] border border-white/10 rounded-lg py-2.5 text-[10px] text-white uppercase tracking-widest font-light hover:bg-white/[0.12] transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-white/[0.1] border border-white/15 rounded-lg py-2.5 text-[10px] text-white uppercase tracking-widest font-light hover:bg-white/[0.14] transition-colors"
             >
               Chat Now
             </button>
@@ -455,14 +470,16 @@ export default function Chatbot() {
 
       {/* ── Chat panel ── */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-[min(calc(100vw-2rem),20rem)] h-[460px] max-h-[80vh] bg-[#0a0a0a] border border-white/[0.06] rounded-xl shadow-[0_0_60px_rgba(0,0,0,0.9)] flex flex-col overflow-hidden animate-fade-in-up">
+        <div className="absolute bottom-16 right-0 w-[min(calc(100vw-2rem),20rem)] h-[460px] max-h-[80vh] flex flex-col overflow-hidden rounded-2xl border border-white/[0.1] bg-[#080808]/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_28px_110px_rgba(0,0,0,0.78)] backdrop-blur-2xl animate-fade-in-up">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_0%,rgba(255,255,255,0.08),transparent_52%)]" />
+          <div className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
           {/* Header — James branded */}
-          <div className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+          <div className="relative z-10 px-5 py-4 border-b border-white/[0.08] bg-white/[0.025] flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full overflow-hidden border border-white/10 shrink-0">
+              <div className="w-9 h-9 rounded-full overflow-hidden border border-white/15 shadow-[0_0_22px_rgba(52,211,153,0.12)] shrink-0">
                 <Image
-                  src="/james-headshot.jpg"
-                  alt="James"
+                  src={JAMES_BOT.avatar}
+                  alt={JAMES_BOT.name}
                   width={108}
                   height={108}
                   quality={100}
@@ -472,12 +489,12 @@ export default function Chatbot() {
               </div>
               <div>
                 <span className="text-xs text-white font-light tracking-tight block">
-                  James
+                  {JAMES_BOT.name}
                 </span>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="text-[9px] text-zinc-500 tracking-widest uppercase font-light">
-                    Online 24/7
+                    {JAMES_BOT.status}
                   </span>
                 </div>
               </div>
@@ -492,7 +509,7 @@ export default function Chatbot() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+          <div className="relative z-10 flex-1 overflow-y-auto px-5 py-4 space-y-4">
             {messages.map((msg, idx) => (
               <div key={msg.id}>
                 <div
@@ -504,8 +521,8 @@ export default function Chatbot() {
                   {msg.role === 'bot' && (
                     <div className="w-6 h-6 rounded-full overflow-hidden border border-white/10 shrink-0 mt-1">
                       <Image
-                        src="/james-headshot.jpg"
-                        alt="James"
+                        src={JAMES_BOT.avatar}
+                        alt={JAMES_BOT.name}
                         width={72}
                         height={72}
                         quality={100}
@@ -517,8 +534,8 @@ export default function Chatbot() {
                   <div
                     className={`max-w-[80%] px-4 py-3 text-[13px] leading-relaxed font-light ${
                       msg.role === 'user'
-                        ? 'bg-white/[0.08] text-white rounded-xl rounded-br-sm'
-                        : 'text-zinc-400 bg-white/[0.03] rounded-xl rounded-bl-sm'
+                        ? 'bg-white/[0.1] text-white border border-white/[0.08] rounded-xl rounded-br-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]'
+                        : 'text-zinc-400 bg-white/[0.045] border border-white/[0.06] rounded-xl rounded-bl-sm'
                     }`}
                   >
                     {msg.content}
@@ -551,7 +568,7 @@ export default function Chatbot() {
               <div className="space-y-3 ml-8">
                 {/* Option 1: Text Chad directly */}
                 <a
-                  href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I was chatting with James on your site and I'm interested in working together.")}`}
+                  href={`sms:${PERSONAL.phone}?&body=${encodeURIComponent("Hey Chad! I was chatting with James and want to reserve the $500 Starter Launch build.")}`}
                   className="flex items-center justify-center gap-2 w-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded-xl py-3 text-[11px] font-medium tracking-wide uppercase hover:bg-emerald-500/30 transition-colors"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
@@ -605,8 +622,8 @@ export default function Chatbot() {
               <div className="flex items-start gap-2">
                 <div className="w-6 h-6 rounded-full overflow-hidden border border-white/10 shrink-0">
                   <Image
-                    src="/james-headshot.jpg"
-                    alt="James"
+                    src={JAMES_BOT.avatar}
+                    alt={JAMES_BOT.name}
                     width={72}
                     height={72}
                     quality={100}
@@ -637,7 +654,7 @@ export default function Chatbot() {
           </div>
 
           {/* Input */}
-          <div className="px-4 py-3 border-t border-white/[0.06]">
+          <div className="relative z-10 px-4 py-3 border-t border-white/[0.08] bg-white/[0.025]">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -659,7 +676,7 @@ export default function Chatbot() {
                 type="submit"
                 disabled={!input.trim()}
                 aria-label="Send message"
-                className="w-8 h-8 flex shrink-0 items-center justify-center text-zinc-600 hover:text-white transition-colors disabled:opacity-20"
+                className="w-8 h-8 flex shrink-0 items-center justify-center rounded-full border border-white/[0.06] bg-white/[0.035] text-zinc-500 hover:text-white hover:bg-white/[0.08] transition-colors disabled:opacity-20"
               >
                 <ArrowUpRight className="w-4 h-4" />
               </button>
@@ -668,13 +685,13 @@ export default function Chatbot() {
         </div>
       )}
 
-      {/* ── "Need Help?" label — shows before promo, always visible ── */}
+      {/* ── "Need Help?" label — shows before promo on larger screens ── */}
       {!isOpen && !showPromo && !promoDismissed && (
         <button
           onClick={() => {
             setShowPromo(true);
           }}
-          className="absolute bottom-14 right-0 whitespace-nowrap bg-[#0a0a0a]/90 backdrop-blur border border-white/[0.06] rounded-full px-3.5 py-1.5 text-[10px] text-zinc-400 uppercase tracking-widest font-light hover:text-white hover:border-white/10 transition-all duration-300 animate-fade-in-up"
+          className="absolute bottom-14 right-0 hidden whitespace-nowrap rounded-full border border-white/[0.1] bg-[#080808]/75 px-3.5 py-1.5 text-[10px] text-zinc-400 uppercase tracking-widest font-light shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_14px_50px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-all duration-300 animate-fade-in-up hover:border-white/20 hover:bg-white/[0.07] hover:text-white sm:block"
           style={{ animationDelay: '6s', animationFillMode: 'both' }}
         >
           Need Help?
@@ -695,10 +712,10 @@ export default function Chatbot() {
       </div>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`hidden lg:flex w-11 h-11 sm:w-12 sm:h-12 items-center justify-center rounded-xl transition-all duration-300 ${
+        className={`hidden lg:flex w-11 h-11 sm:w-12 sm:h-12 items-center justify-center rounded-xl border shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_14px_50px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-all duration-300 ${
           isOpen
-            ? 'bg-transparent text-zinc-500 hover:text-white'
-            : 'bg-[#0a0a0a] border border-white/[0.06] text-zinc-500 hover:text-white hover:border-white/10'
+            ? 'border-white/[0.06] bg-transparent text-zinc-500 hover:text-white'
+            : 'border-white/[0.1] bg-[#080808]/75 text-zinc-500 hover:text-white hover:border-white/20 hover:bg-white/[0.07]'
         }`}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
